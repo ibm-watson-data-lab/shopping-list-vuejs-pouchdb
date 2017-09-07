@@ -69,7 +69,8 @@ var app = new Vue({
   },
   computed: {
     shoppingListSaveDisabled: function() {
-      return (this.singleList.title.length == 0 || this.singleList.place.title.length == 0);
+      return (this.singleList.title.length == 0);
+      //|| this.singleList.place.title.length == 0);
     }
   },
   methods: {
@@ -84,7 +85,7 @@ var app = new Vue({
     onClickSaveShoppingList: function() {
 
       // add timestamps
-      console.log(JSON.stringify(this.singleList));
+      //console.log(JSON.stringify(this.singleList));
       this.singleList.updatedAt = new Date().toISOString();
 
       // add to on-screen list, if it's not there already
@@ -104,12 +105,6 @@ var app = new Vue({
     onBack: function() {
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
-    },
-    onChangeChecked: function(val,ev) {
-      // we need to identify which id has just changed
-      var id = $(ev.target.parentNode).attr('data-id')
-      // and save it to PouchDB
-      this.saveList(id);
     },
     saveList: function(id) {
       // locate this document and save it to PouchDB
