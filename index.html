@@ -5,16 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
   <title>Shopping List</title>
 
-  <!-- CSS  -->
+  <!-- Material Design icons and fonts  -->
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Material Design styles for Vue.js  -->
   <link rel="stylesheet" href="https://unpkg.com/vue-material@0.7.4/dist/vue-material.css">
+
+  <!-- our styles -->
   <link href="css/shoppinglist.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
 
-  <div id="app" class="app-viewport" id="file-list" v-cloak>    
+  <!-- Vue app -->
+  <div id="app" class="app-viewport" v-cloak>    
 
+    <!-- top bar -->
     <md-whiteframe md-elevation="3" class="main-toolbar">
       <md-toolbar>
         <div class="md-toolbar-container">
@@ -23,6 +29,7 @@
       </md-toolbar>
     </md-whiteframe>
     
+    <!-- main content -->
     <main class="main-content">
 
       <!-- add new shopping list -->
@@ -57,23 +64,16 @@
         </md-card>
       </md-list>
 
+      <!-- floating 'add shopping list' button -->
       <div class="floatingbutton" v-if="mode == 'showlist'">
-        <md-button class="md-fab md-primary" v-on:click="onClickAddShoppingList">
+        <md-button class="md-fab md-primary md-raised" v-on:click="onClickAddShoppingList">
           <md-icon>add</md-icon>
         </md-button>
       </div>
 
-    </main>
+    </main> <!-- main content -->
 
-
-  </div>
-
-
-
-
-
-
-
+  </div> <!-- app -->
 
   <!--  Scripts-->
   <!-- jQuery -->

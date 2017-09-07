@@ -1,7 +1,7 @@
 
 ## Tools
 
-- http://materializecss.com/
-- https://vuejs.org/
-- https://pouchdb.com/
+- http://vuematerial.io/ - Vue/Materialize components
+- https://vuejs.org/ - Vue.js framework
+- https://pouchdb.com/ - PouchDB library
 - https://usecuid.org/ - unique id generation
