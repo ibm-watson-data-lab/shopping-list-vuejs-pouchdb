@@ -70,6 +70,7 @@ var app = new Vue({
       // open shopping list form
       this.newShoppingListName = '';
       this.newShoppingListPlaceName = '';
+      this.pagetitle = 'New Shopping List';
       this.mode='addlist';
     },
     onClickSaveShoppingList: function() {
@@ -93,8 +94,9 @@ var app = new Vue({
         obj._rev = data.rev;
       });
     },
-    onClickCancelShoppingList: function() {
+    onBack: function() {
       this.mode='showlist';
+      this.pagetitle='Shopping Lists';
     }
   }
 })

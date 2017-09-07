@@ -23,9 +23,19 @@
     <!-- top bar -->
     <md-whiteframe md-elevation="3" class="main-toolbar">
       <md-toolbar>
-        <div class="md-toolbar-container">
-          <h2 class="md-title">{{ pagetitle }}</h2>
-        </div>
+        <!-- back button -->
+        <md-button class="md-icon-button" v-if="mode != 'showlist'" v-on:click="onBack">
+            <md-icon>arrow_back</md-icon>
+        </md-button>
+        
+        <!-- page title -->
+        <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
+        
+        <!-- save new shopping list button -->
+        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="newShoppingListDisabled">
+          <md-icon>check</md-icon>
+        </md-button>
+
       </md-toolbar>
     </md-whiteframe>
     
@@ -35,10 +45,6 @@
       <!-- add new shopping list -->
       <md-card v-if="mode == 'addlist'">
         <md-card-header>Add Shopping List</md-card-header>
-        <md-card-actions>
-          <md-button v-on:click="onClickCancelShoppingList">Cancel</md-button>
-          <md-button v-on:click="onClickSaveShoppingList">Save</md-button>
-        </md-card-actions>
         <md-card-content>
           <md-input-container>
             <label>List name</label>

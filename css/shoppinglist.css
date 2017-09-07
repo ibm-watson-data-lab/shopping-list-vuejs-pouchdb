@@ -33,6 +33,6 @@ body {
 
 .main-toolbar{
   position:sticky;
-  top:1px;
+  top:0px;
   z-index:1000;
 }
