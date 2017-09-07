@@ -6,97 +6,78 @@
   <title>Shopping List</title>
 
   <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/vue-material@0.7.4/dist/vue-material.css">
   <link href="css/shoppinglist.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-  <div id="app" v-cloak>
-    <div class="navbar-fixed">
-      <nav class="blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">{{ pagetitle }}</a>
-        <!-- <ul class="right hide-on-med-and-down">
-            <li><a href="#">Navbar Link</a></li>
-          </ul>
 
-          <ul id="nav-mobile" class="side-nav">
-            <li><a href="#">Navbar Link</a></li>
-          </ul>
-          <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-        -->
+  <div id="app" class="app-viewport" id="file-list" v-cloak>    
+
+    <md-whiteframe md-elevation="3" class="main-toolbar">
+      <md-toolbar>
+        <div class="md-toolbar-container">
+          <h2 class="md-title">{{ pagetitle }}</h2>
         </div>
-      </nav>
-    </div>
-    <div class="section no-pad-bot">
-      <!-- render list of shopping lists -->
-      <div class="container" v-for="list in shoppingLists">
-        <div class="row">
-          <div class="col s12 m6">
-            <div class="card white">
-              <div class="card-content">
-                <span class="card-title">{{ list.title }}</span>
-                <p class="grey-text">{{ list.place.title }}</p>
-              </div>
-              <div class="card-action">
-                <div class="row">
-                  <div class="input-field inline col s6">
-                    <input v-bind:id="list._id" class="filled-in" type="checkbox" v-model="list.checked" />
-                    <label v-bind:for="list._id">&nbsp;</label>
-                  </div>
-                  <div class="col s6">
-                      1 of 3 items checked
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> <!-- container -->
+      </md-toolbar>
+    </md-whiteframe>
+    
+    <main class="main-content">
 
-    </div>
+      <!-- add new shopping list -->
+      <md-card v-if="mode == 'addlist'">
+        <md-card-header>Add Shopping List</md-card-header>
+        <md-card-actions>
+          <md-button v-on:click="onClickCancelShoppingList">Cancel</md-button>
+          <md-button v-on:click="onClickSaveShoppingList">Save</md-button>
+        </md-card-actions>
+        <md-card-content>
+          <md-input-container>
+            <label>List name</label>
+            <md-input placeholder="e.g. Food" v-model="newShoppingListName"></md-input>
+          </md-input-container>    
+          <md-input-container>
+            <label>Place name</label>
+            <md-input placeholder="e.g. Whole Food Markets" v-model="newShoppingListPlaceName"></md-input>
+          </md-input-container>          
+        </md-card-content>
+      </md-card>
 
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-      <div class="modal-content">
-        <h4>New Shopping List</h4>
-        <div class="row">
-          <form class="col s12">
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="name" type="text" v-model="newShoppingListName" placeholder="e.g. Food">
-                <label for="name">List Name</label>
-              </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                  <input id="placename" type="text" v-model="newShoppingListPlaceName" placeholder="e.g. Whole Foods">
-                  <label for="placename">Place Name</label>
-                </div>
-              </div>
-          </form>
-        </div>
+      <!-- list of shopping lists -->
+      <md-list class="md-double-line" v-if="mode == 'showlist'">
+        <md-card v-for="list in shoppingLists" >     
+          <md-card-header>
+            <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
+            <div class="md-subhead">{{ list.place.title }}</div>
+          </md-card-header>
+          <md-card-content>
+              <md-checkbox v-model="list.checked" class="md-primary"></md-checkbox>                
+          </md-card-content>
+        </md-card>
+      </md-list>
 
+      <div class="floatingbutton" v-if="mode == 'showlist'">
+        <md-button class="md-fab md-primary" v-on:click="onClickAddShoppingList">
+          <md-icon>add</md-icon>
+        </md-button>
       </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" v-on:click="onClickSaveShoppingList"  :disabled="newShoppingListDisabled">Save</a>
-      </div>
-    </div>
 
-    <!-- fixed 'add shopping list' button -->
-    <div class="fixed-action-btn">
-      <a class="btn-floating btn-large blue">
-        <i v-on:click="onClickAddShoppingList" class="large material-icons">add</i>
-      </a>
-    </div>
+    </main>
+
+
   </div>
+
+
+
+
+
+
+
 
   <!--  Scripts-->
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-
-  <!-- Materialize material design JavaScript -->
-  <script src="js/materialize.js"></script>
 
   <!-- cuid - unique id generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
@@ -107,6 +88,9 @@
 
   <!-- Vue.js - framework that handles DOM/Model interaction -->
   <script src="https://unpkg.com/vue"></script>
+
+   <!-- vue-material - Material Design for Vue.js -->
+   <script src="https://unpkg.com/vue-material@0.7.4/dist/vue-material.js"></script>
 
   <!-- our code -->
   <script src="js/shoppinglist.js"></script>

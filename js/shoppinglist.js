@@ -1,14 +1,4 @@
 
-
-(function($){
-  $(function(){
-    $('.modal').modal();
-    $('.button-collapse').sideNav();
-
-  }); // end of document ready
-})(jQuery); // end of jQuery name space
-
-
 var sampleShoppingList = {
   "_id": "list:cj6mj1zfj000001n1ugjfkj33",
   "type": "list",
@@ -27,9 +17,21 @@ var sampleShoppingList = {
 };
 
 // Vue app
+Vue.use(VueMaterial);
+
+// theme
+Vue.material.registerTheme('default', {
+  primary: 'blue',
+  accent: 'red',
+  warn: 'red',
+  background: 'grey'
+})
+
+
 var app = new Vue({
   el: '#app',
   data: {
+    mode: 'showlist',
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
     newShoppingListName: '',
@@ -37,9 +39,6 @@ var app = new Vue({
     db: null
   },
   created: () => {
-    // initialise Materialize
-    $('.button-collapse').sideNav();
-    $('.modal').modal();
 
     // initialize PouchDB
     db = new PouchDB('shopping');
@@ -71,8 +70,7 @@ var app = new Vue({
       // open shopping list form
       this.newShoppingListName = '';
       this.newShoppingListPlaceName = '';
-      $('#modal1').modal('open');
-      
+      this.mode='addlist';
     },
     onClickSaveShoppingList: function() {
       // clone the sample shopping list, add our data into it
@@ -87,12 +85,16 @@ var app = new Vue({
 
       // add to on-screen list
       this.shoppingLists.unshift(obj);
+      this.mode='showlist';
       
       // write to database
       db.put(obj).then(function(data) {
         // keep the revision tokens
         obj._rev = data.rev;
       });
+    },
+    onClickCancelShoppingList: function() {
+      this.mode='showlist';
     }
   }
 })
