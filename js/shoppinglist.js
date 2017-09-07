@@ -1,19 +1,23 @@
 
-var sampleShoppingList = {
-  "_id": "list:cj6mj1zfj000001n1ugjfkj33",
+const sampleShoppingList = {
+  "_id": "",
   "type": "list",
   "version": 1,
-  "title": "Groceries",
+  "title": "",
   "checked": false,
   "place": {
-    "title": "Healthy Living",
+    "title": "",
     "license": null,
     "lat": null,
     "lon": null,
     "address": null
   },
-  "createdAt": "2017-08-21T18:40:00.000Z",
-  "updatedAt": "2017-08-21T18:40:00.000Z"
+  "createdAt": "",
+  "updatedAt": ""
+};
+
+const clone = function(obj) {
+  return JSON.parse(JSON.stringify(obj));
 };
 
 // Vue app
@@ -27,7 +31,10 @@ Vue.material.registerTheme('default', {
   background: 'grey'
 })
 
+// this will be the PouchDB database
+var db = null;
 
+// this is the Vue.js app
 var app = new Vue({
   el: '#app',
   data: {
@@ -36,7 +43,7 @@ var app = new Vue({
     shoppingLists: [],
     newShoppingListName: '',
     newShoppingListPlaceName: '',
-    db: null
+    singleList: null
   },
   created: () => {
 
@@ -61,42 +68,62 @@ var app = new Vue({
 
   },
   computed: {
-    newShoppingListDisabled: function() {
-      return (this.newShoppingListName.length == 0 || this.newShoppingListPlaceName == 0);
+    shoppingListSaveDisabled: function() {
+      return (this.singleList.title.length == 0 || this.singleList.place.title.length == 0);
     }
   },
   methods: {
     onClickAddShoppingList: function(e) {
       // open shopping list form
-      this.newShoppingListName = '';
-      this.newShoppingListPlaceName = '';
+      this.singleList = clone(sampleShoppingList);
+      this.singleList._id = 'list:' + cuid();
+      this.singleList.createdAt = new Date().toISOString();
       this.pagetitle = 'New Shopping List';
       this.mode='addlist';
     },
     onClickSaveShoppingList: function() {
-      // clone the sample shopping list, add our data into it
-      var obj = JSON.parse(JSON.stringify(sampleShoppingList));
-      obj._id = 'list:' + cuid();
-      obj.title = this.newShoppingListName;
-      obj.place.title = this.newShoppingListPlaceName;
 
       // add timestamps
-      obj.createdAt = new Date().toISOString();
-      obj.updatedAt = new Date().toISOString();
+      console.log(JSON.stringify(this.singleList));
+      this.singleList.updatedAt = new Date().toISOString();
 
-      // add to on-screen list
-      this.shoppingLists.unshift(obj);
-      this.mode='showlist';
+      // add to on-screen list, if it's not there already
+      if (typeof this.singleList._rev === 'undefined') {
+        this.shoppingLists.unshift(this.singleList);
+      }
       
       // write to database
-      db.put(obj).then(function(data) {
+      db.put(this.singleList).then((data) => {
         // keep the revision tokens
-        obj._rev = data.rev;
+        this.singleList._rev = data.rev;
+
+        // switch mode
+        this.mode='showlist';
       });
     },
     onBack: function() {
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
+    },
+    onChangeChecked: function(val,ev,z) {
+      // we need to identify which id has just changed
+      var id = $(ev.target.parentNode).attr('data-id')
+      // and save it to PouchDB
+      this.saveList(id);
+    },
+    saveList: function(id) {
+      // locate this document and save it to PouchDB
+      for(var i in this.shoppingLists) {
+        if (this.shoppingLists[i]._id == id) {
+          this.$nextTick(() => {
+            db.put(this.shoppingLists[i]).then((data) => {
+              this.shoppingLists[i]._rev = data.rev;
+            });
+          })
+          break;
+        }
+      }
     }
+
   }
 })

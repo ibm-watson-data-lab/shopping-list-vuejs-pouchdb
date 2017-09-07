@@ -32,7 +32,7 @@
         <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
         
         <!-- save new shopping list button -->
-        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="newShoppingListDisabled">
+        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="shoppingListSaveDisabled">
           <md-icon>check</md-icon>
         </md-button>
 
@@ -48,24 +48,24 @@
         <md-card-content>
           <md-input-container>
             <label>List name</label>
-            <md-input placeholder="e.g. Food" v-model="newShoppingListName"></md-input>
+            <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
           </md-input-container>    
           <md-input-container>
             <label>Place name</label>
-            <md-input placeholder="e.g. Whole Food Markets" v-model="newShoppingListPlaceName"></md-input>
+            <md-input placeholder="e.g. Whole Food Markets" v-model="singleList.place.title"></md-input>
           </md-input-container>          
         </md-card-content>
       </md-card>
 
       <!-- list of shopping lists -->
-      <md-list class="md-double-line" v-if="mode == 'showlist'">
-        <md-card v-for="list in shoppingLists" >     
+      <md-list v-if="mode == 'showlist'">
+        <md-card v-for="list in shoppingLists" :key="list._id">     
           <md-card-header>
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
             <div class="md-subhead">{{ list.place.title }}</div>
           </md-card-header>
           <md-card-content>
-              <md-checkbox v-model="list.checked" class="md-primary"></md-checkbox>                
+              <md-checkbox v-on:change="onChangeChecked" :data-id="list._id" v-model="list.checked" class="md-primary"></md-checkbox>                
           </md-card-content>
         </md-card>
       </md-list>
