@@ -1,0 +1,34 @@
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+body {
+  background-color: #ddd;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+/* label focus color */
+.input-field input:focus + label {
+  color: #42A5F5 !important;
+}
+/* label underline focus color */
+.row .input-field input:focus {
+  border-bottom: 1px solid #42A5F5 !important;
+  box-shadow: 0 1px 0 0 #42A5F5 !important
+}
+
+/* label underline focus color */
+[type="checkbox"]:checked + label:before  {
+ 
+}
+
+[type="checkbox"].filled-in:checked + label:after {
+  border: 2px solid #42A5F5 !important;
+  background-color: #42A5F5 !important;
+}

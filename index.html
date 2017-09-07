@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Shopping List</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/shoppinglist.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <div class="navbar-fixed">
+      <nav class="blue lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">{{ pagetitle }}</a>
+        <!-- <ul class="right hide-on-med-and-down">
+            <li><a href="#">Navbar Link</a></li>
+          </ul>
+
+          <ul id="nav-mobile" class="side-nav">
+            <li><a href="#">Navbar Link</a></li>
+          </ul>
+          <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        -->
+        </div>
+      </nav>
+    </div>
+    <div class="section no-pad-bot">
+      <!-- render list of shopping lists -->
+      <div class="container" v-for="list in shoppingLists">
+        <div class="row">
+          <div class="col s12 m6">
+            <div class="card white">
+              <div class="card-content">
+                <span class="card-title">{{ list.title }}</span>
+                <p class="grey-text">{{ list.place.title }}</p>
+              </div>
+              <div class="card-action">
+                <div class="row">
+                  <div class="input-field inline col s6">
+                    <input v-bind:id="list._id" class="filled-in" type="checkbox" v-model="list.checked" />
+                    <label v-bind:for="list._id">&nbsp;</label>
+                  </div>
+                  <div class="col s6">
+                      1 of 3 items checked
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- container -->
+
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>New Shopping List</h4>
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="name" type="text" v-model="newShoppingListName" placeholder="e.g. Food">
+                <label for="name">List Name</label>
+              </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                  <input id="placename" type="text" v-model="newShoppingListPlaceName" placeholder="e.g. Whole Foods">
+                  <label for="placename">Place Name</label>
+                </div>
+              </div>
+          </form>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" v-on:click="onClickSaveShoppingList"  :disabled="newShoppingListDisabled">Save</a>
+      </div>
+    </div>
+
+    <!-- fixed 'add shopping list' button -->
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large blue">
+        <i v-on:click="onClickAddShoppingList" class="large material-icons">add</i>
+      </a>
+    </div>
+  </div>
+
+  <!--  Scripts-->
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <!-- Materialize material design JavaScript -->
+  <script src="js/materialize.js"></script>
+
+  <!-- cuid - unique id generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
+
+  <!-- PouchDB - in-browser database -->
+  <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.find.min.js"></script>
+
+  <!-- Vue.js - framework that handles DOM/Model interaction -->
+  <script src="https://unpkg.com/vue"></script>
+
+  <!-- our code -->
+  <script src="js/shoppinglist.js"></script>
+
+  </body>
+</html>
