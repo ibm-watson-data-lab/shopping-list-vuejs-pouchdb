@@ -63,9 +63,26 @@
           <md-card-header>
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
             <div class="md-subhead">{{ list.place.title }}</div>
+            <md-speed-dial md-open="hover" md-direction="left" class="md-fab-top-right">
+              <md-button class="md-fab" md-fab-trigger>
+                <md-icon md-icon-morph>event</md-icon>
+                <md-icon>more_horiz</md-icon>
+              </md-button>
+            
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit" :data-id="list._id">
+                <md-icon>edit</md-icon>
+              </md-button>
+            
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete" :data-id="list._id">
+                <md-icon>delete</md-icon>
+              </md-button>
+            </md-speed-dial>
           </md-card-header>
           <md-card-content>
               <md-checkbox v-on:change="onChangeChecked" :data-id="list._id" v-model="list.checked" class="md-primary"></md-checkbox>                
+              <!--<md-button class="md-fab md-fab-bottom-right" >
+                <md-icon>edit</md-icon>
+              </md-button>-->
           </md-card-content>
         </md-card>
       </md-list>

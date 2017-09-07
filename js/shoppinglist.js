@@ -26,7 +26,7 @@ Vue.use(VueMaterial);
 // theme
 Vue.material.registerTheme('default', {
   primary: 'blue',
-  accent: 'red',
+  accent: 'white',
   warn: 'red',
   background: 'grey'
 })
@@ -105,7 +105,7 @@ var app = new Vue({
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
     },
-    onChangeChecked: function(val,ev,z) {
+    onChangeChecked: function(val,ev) {
       // we need to identify which id has just changed
       var id = $(ev.target.parentNode).attr('data-id')
       // and save it to PouchDB
@@ -120,6 +120,29 @@ var app = new Vue({
               this.shoppingLists[i]._rev = data.rev;
             });
           })
+          break;
+        }
+      }
+    },
+    onClickEdit: function(ev) {
+      var id = $(ev.target.parentNode).attr('data-id');
+      for(var i in this.shoppingLists) {
+        if (this.shoppingLists[i]._id == id) {
+          this.singleList = this.shoppingLists[i];
+          this.pagetitle = 'Edit - ' + this.singleList.title;
+          this.mode='addlist';
+          break;
+        }
+      }
+    },
+    onClickDelete: function(ev) {
+      var id = $(ev.target.parentNode).attr('data-id');
+      for(var i in this.shoppingLists) {
+        if (this.shoppingLists[i]._id == id) {
+          db.remove(this.shoppingLists[i]).then(() => {
+            this.shoppingLists.splice(i, 1);
+            console.log('removed');
+          });
           break;
         }
       }
