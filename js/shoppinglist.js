@@ -25,23 +25,17 @@ const sampleListItem = {
   "updatedAt": ""
 };
 
+// clone an object
 const clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
 
-const mapCountItemsByList = function(doc) { 
-  if (doc.type=='item') { 
-    emit(doc.list, null);
-  } 
-}
-
-const mapCountCheckedItemsByList = function(doc) { 
-  if (doc.type=='item' && doc.checked) { 
-    emit(doc.list, null);
-  } 
-}
-
-
+// sort comparison function to sort be updateAt
+const  newestFirst = (a, b) => {
+  if (a.updatedAt > b.updatedAt) return -1;
+  if (a.updatedAt < b.updatedAt) return 1;
+  return 0 
+};
 
 // Vue app
 Vue.use(VueMaterial);
@@ -78,17 +72,19 @@ var app = new Vue({
     db = new PouchDB('shopping');
 
     // create database index ordered by updatedAt date
-    db.createIndex({ index: { fields: ['updatedAt'] }}).then(() => {
+    db.createIndex({ index: { fields: ['type'] }}).then(() => {
+      
       // load all 'list' items ordered by updated date
       var q = {
         selector: {
-          type: 'list',
-          updatedAt: { '$gt': '' }
-        },
-        sort: [ { 'updatedAt': 'desc' }]
+          type: 'list'
+        }
       };
-      return db.find(q)
+       return db.find(q);
     }).then((data) => {
+
+      data.docs.sort(newestFirst);
+
       // write the data to the Vue model, and from there the web page
       app.shoppingLists = data.docs;
       return app.updateCounts()
@@ -96,16 +92,28 @@ var app = new Vue({
 
   },
   methods: {
+    // calculate the counts of items and which items are checked,
+    // grouped by shopping list
     updateCounts: function() {
-      return db.query({map: mapCountItemsByList, reduce:'_count'}, {group: true}).then( (data) => {
-        for(var i in data.rows) {
-          Vue.set(this.counts, data.rows[i].key, { total: data.rows[i].value, checked: 0 })
+
+      // query all the shopping list items
+      return db.find({ 
+        selector: { type: 'item' },
+        fields: ['list', 'checked']
+      }).then((data) => {
+        var obj = {};
+        // count #items and how many are checked
+        for(var i in data.docs) {
+          var d = data.docs[i];
+          if (!obj[d.list]) {
+            obj[d.list] = { total: 0, checked: 0};
+          }
+          obj[d.list].total++;
+          if (d.checked) {
+            obj[d.list].checked++;
+          }
         }
-        return db.query({map: mapCountCheckedItemsByList, reduce:'_count'}, {group: true});
-      }).then( (data) => {
-        for(var i in data.rows) {
-          this.counts[data.rows[i].key].checked = data.rows[i].value;
-        }
+        this.counts = obj;
       });
     },
     // given an array (docs) and document id, loop through the docs
@@ -204,12 +212,11 @@ var app = new Vue({
       var q = {
         selector: {
           type: 'item',
-          list: id,
-          updatedAt: { '$gt': '' }
-        },
-        sort: [ { 'updatedAt': 'desc' }]
+          list: id
+        }
       };
       db.find(q).then((data) => {
+        data.docs.sort(newestFirst);
         this.listItems = data.docs;
         this.mode = 'itemedit';
         this.pagetitle = title;
