@@ -164,9 +164,9 @@ var app = new Vue({
 
     // when someone clicks 'back', restore the home screen
     onBack: function() {
-      console.log('on back');
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
+      this.updateCounts();
     },
 
     // the use wants to edit an individual shopping list
