@@ -41,9 +41,8 @@ var app = new Vue({
     mode: 'showlist',
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
-    newShoppingListName: '',
-    newShoppingListPlaceName: '',
-    singleList: null
+    singleList: null,
+    listItems: []
   },
   created: () => {
 
@@ -141,6 +140,32 @@ var app = new Vue({
           break;
         }
       }
+    },
+    onClickList: function(ev) {
+      console.log('click card', ev);
+      var id = $(ev.target).attr('data-id');
+      this.mode = 'itemedit';
+      this.listItems = [
+        {
+          "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
+          "type": "item",
+          "version": 1,
+          "title": "Mangos",
+          "checked": false,
+          "createdAt": "2017-08-21T18:43:00.000Z",
+          "updatedAt": "2017-08-21T18:43:00.000Z"
+        },
+        {
+          "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
+          "type": "item",
+          "version": 1,
+          "title": "Apples",
+          "checked": false,
+          "createdAt": "2017-08-21T18:43:00.000Z",
+          "updatedAt": "2017-08-21T18:43:00.000Z"
+        }
+      ]
+      console.log(id);
     }
 
   }
