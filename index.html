@@ -32,7 +32,7 @@
         <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
         
         <!-- save new shopping list button -->
-        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="shoppingListSaveDisabled">
+        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0">
           <md-icon>check</md-icon>
         </md-button>
 
@@ -50,12 +50,12 @@
             <label>List name</label>
             <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
           </md-input-container>   
-          <!-- 
+          
           <md-input-container>
             <label>Place name</label>
             <md-input placeholder="e.g. Whole Food Markets" v-model="singleList.place.title"></md-input>
           </md-input-container>    
-        -->      
+          
         </md-card-content>
       </md-card>
 
@@ -69,9 +69,9 @@
             <md-icon class="md-primary">add</md-icon>
           </md-button>
         </md-list-item>
-        <md-list-item v-for="item in listItems" :key="item._id" :data-id="item._id">
+        <md-list-item v-for="item in listItems" :key="item._id">
           <div>
-            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem"></md-checkbox>
+            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
           </div>
           <div class="md-list-text-container">
             <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
@@ -90,18 +90,18 @@
         <md-card v-for="list in shoppingLists" :key="list._id" :data-id="list._id">     
           <md-card-header>
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
-           <!-- <div class="md-subhead">{{ list.place.title }}</div>-->
+            <div class="md-subhead">{{ list.place.title }}</div>
             <md-speed-dial md-open="hover" md-direction="left" class="md-fab-top-right">
               <md-button class="" md-fab-trigger>
                 <md-icon md-icon-morph>more_vert</md-icon>
                 <md-icon>more_horiz</md-icon>
               </md-button>
             
-              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit">
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit(list._id, list.title)">
                 <md-icon>edit</md-icon>
               </md-button>
             
-              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete">
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete(list._id)">
                 <md-icon>delete</md-icon>
               </md-button>
             </md-speed-dial>
@@ -113,7 +113,7 @@
               </md-button>
           </md-card-content>-->
           <md-card-actions>
-              <md-button v-on:click="onClickList">List</md-button>
+              <md-button v-on:click="onClickList(list._id, list.title)">List</md-button>
             </md-card-actions>
         </md-card>
       </md-list>

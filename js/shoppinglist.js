@@ -1,4 +1,3 @@
-
 const sampleShoppingList = {
   "_id": "",
   "type": "list",
@@ -30,22 +29,6 @@ const clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
 
-// if we have HTML like this
-// <div data-id="x"><div><span>
-// then findDataIt, given the span will recurse up the tree to
-// find a node with a data-id attribute.
-const findDataId = function(el) {
-  var id = el.attr('data-id');
-  if (!id) {
-    var parent = el.parent();
-    if (parent) {
-      return findDataId(parent);
-    }
-  } else {
-    return id;
-  }
-}
-
 // Vue app
 Vue.use(VueMaterial);
 
@@ -72,6 +55,8 @@ var app = new Vue({
     currentListId: null,
     newItemTitle:''
   },
+
+  // called once at app startup
   created: () => {
 
     // initialize PouchDB
@@ -94,13 +79,10 @@ var app = new Vue({
     });
 
   },
-  computed: {
-    shoppingListSaveDisabled: function() {
-      return (this.singleList.title.length == 0);
-      //|| this.singleList.place.title.length == 0);
-    }
-  },
   methods: {
+    // given an array (docs) and document id, loop through the docs
+    // searching for the one with an _id of id. If you find it
+    // write it to PouchDB and keep the revision token
     findUpdateDoc: function(docs, id) {
       var doc = null;
       for(var i in docs) {
@@ -115,6 +97,8 @@ var app = new Vue({
         }
       }
     },
+    // when the user has hit the big + buton to say they want to
+    // add new shopping list
     onClickAddShoppingList: function(e) {
       // open shopping list form
       this.singleList = clone(sampleShoppingList);
@@ -123,6 +107,9 @@ var app = new Vue({
       this.pagetitle = 'New Shopping List';
       this.mode='addlist';
     },
+
+    // when we know the name of the new shopping list we can
+    // timestamp the object and save it
     onClickSaveShoppingList: function() {
 
       // add timestamps
@@ -139,30 +126,33 @@ var app = new Vue({
         this.singleList._rev = data.rev;
 
         // switch mode
-        this.mode='showlist';
+        this.onBack();
       });
     },
+
+    // when someone clicks 'back', restore the home screen
     onBack: function() {
+      console.log('on back');
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
     },
-    saveList: function(id) {
-      // locate this document and save it to PouchDB
-      this.findUpdateDoc(this.shoppingLists, id);
-    },
-    onClickEdit: function(ev) {
-      var id = findDataId($(ev.target));
+
+    // the use wants to edit an individual shopping list
+    // (not the items, but the meta data)
+    onClickEdit: function(id, title, ev) {
       for(var i in this.shoppingLists) {
         if (this.shoppingLists[i]._id == id) {
           this.singleList = this.shoppingLists[i];
-          this.pagetitle = 'Edit - ' + this.singleList.title;
+          this.pagetitle = 'Edit - ' + title;
           this.mode='addlist';
           break;
         }
       }
     },
-    onClickDelete: function(ev) {
-      var id = findDataId($(ev.target));
+
+    // user wants to delete a shopping list. We kill the parent document
+    // but the items remain in the database
+    onClickDelete: function(id) {
       for(var i in this.shoppingLists) {
         if (this.shoppingLists[i]._id == id) {
           db.remove(this.shoppingLists[i]).then(() => {
@@ -172,14 +162,17 @@ var app = new Vue({
         }
       }
     },
-    onClickList: function(ev) {
-      this.currentListId = findDataId($(ev.target));
+
+    // the user wants to see the contents of a shopping list
+    // we load it and switch views
+    onClickList: function(id, title) {
+      this.currentListId = id
       this.listItems = [];
 
       var q = {
         selector: {
           type: 'item',
-          list: this.currentListId,
+          list: id,
           updatedAt: { '$gt': '' }
         },
         sort: [ { 'updatedAt': 'desc' }]
@@ -187,8 +180,12 @@ var app = new Vue({
       db.find(q).then((data) => {
         this.listItems = data.docs;
         this.mode = 'itemedit';
+        this.pagetitle = title;
       });
     },
+
+    // when a new shopping list item is added
+    // we create a new document and write it to the db
     onAddListItem: function() {
       var obj = clone(sampleListItem);
       obj._id = 'item:' + cuid();
@@ -202,8 +199,10 @@ var app = new Vue({
         this.newItemTitle = '';
       });
     },
-    onCheckListItem: function(v, ev) {
-      var id = findDataId($(ev.target));
+
+    // when an shopping list item is checked, we just need
+    // to keep the database in step
+    onCheckListItem: function(id) {
       this.findUpdateDoc(this.listItems, id);
     }
 
