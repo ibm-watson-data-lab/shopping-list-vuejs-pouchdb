@@ -29,6 +29,20 @@ const clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
 
+const mapCountItemsByList = function(doc) { 
+  if (doc.type=='item') { 
+    emit(doc.list, null);
+  } 
+}
+
+const mapCountCheckedItemsByList = function(doc) { 
+  if (doc.type=='item' && doc.checked) { 
+    emit(doc.list, null);
+  } 
+}
+
+
+
 // Vue app
 Vue.use(VueMaterial);
 
@@ -53,7 +67,8 @@ var app = new Vue({
     singleList: null,
     listItems: [],
     currentListId: null,
-    newItemTitle:''
+    newItemTitle:'',
+    counts: {}
   },
 
   // called once at app startup
@@ -76,26 +91,43 @@ var app = new Vue({
     }).then((data) => {
       // write the data to the Vue model, and from there the web page
       app.shoppingLists = data.docs;
+      return app.updateCounts()
     });
 
   },
   methods: {
+    updateCounts: function() {
+      return db.query({map: mapCountItemsByList, reduce:'_count'}, {group: true}).then( (data) => {
+        for(var i in data.rows) {
+          Vue.set(this.counts, data.rows[i].key, { total: data.rows[i].value, checked: 0 })
+        }
+        return db.query({map: mapCountCheckedItemsByList, reduce:'_count'}, {group: true});
+      }).then( (data) => {
+        for(var i in data.rows) {
+          this.counts[data.rows[i].key].checked = data.rows[i].value;
+        }
+      });
+    },
     // given an array (docs) and document id, loop through the docs
     // searching for the one with an _id of id. If you find it
     // write it to PouchDB and keep the revision token
     findUpdateDoc: function(docs, id) {
       var doc = null;
-      for(var i in docs) {
-        if (docs[i]._id == id) {
-          doc = docs[i];
-          this.$nextTick(() => {
-            db.put(doc).then((data) => {
-              doc._rev = data.rev;
+      return new Promise( (resolve, reject) => {
+        for(var i in docs) {
+          if (docs[i]._id == id) {
+            doc = docs[i];
+            this.$nextTick(() => {
+              db.put(doc).then((data) => {
+                doc._rev = data.rev;
+                resolve(true)
+              });
             });
-          });
-          break;
+            break;
+          }
         }
-      }
+      });
+
     },
     // when the user has hit the big + buton to say they want to
     // add new shopping list
@@ -203,7 +235,9 @@ var app = new Vue({
     // when an shopping list item is checked, we just need
     // to keep the database in step
     onCheckListItem: function(id) {
-      this.findUpdateDoc(this.listItems, id);
+      this.findUpdateDoc(this.listItems, id).then(() => {
+        return this.updateCounts();
+      });
     }
 
   }

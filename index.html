@@ -92,7 +92,7 @@
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
             <div class="md-subhead">{{ list.place.title }}</div>
             <md-speed-dial md-open="hover" md-direction="left" class="md-fab-top-right">
-              <md-button class="" md-fab-trigger>
+              <md-button class="md-fab" md-fab-trigger>
                 <md-icon md-icon-morph>more_vert</md-icon>
                 <md-icon>more_horiz</md-icon>
               </md-button>
@@ -106,17 +106,15 @@
               </md-button>
             </md-speed-dial>
           </md-card-header>
-         <!-- <md-card-content>
-             <md-checkbox disabled v-model="list.checked" class="md-primary"></md-checkbox> 
-              <md-button class="md-fab md-fab-bottom-right" >
-                <md-icon>edit</md-icon>
-              </md-button>
-          </md-card-content>-->
+          <md-card-content v-if="counts[list._id]">
+            {{ counts[list._id].checked }} / {{ counts[list._id].total }} 
+            <!-- <md-checkbox disabled v-model="list.checked" class="md-primary"></md-checkbox> -->
+          </md-card-content>
           <md-card-actions>
-              <md-button v-on:click="onClickList(list._id, list.title)">
-                  <md-icon>chevron_right</md-icon>
-              </md-button>
-            </md-card-actions>
+            <md-button v-on:click="onClickList(list._id, list.title)">
+                <md-icon>chevron_right</md-icon>
+            </md-button>
+          </md-card-actions>
         </md-card>
       </md-list>
 
