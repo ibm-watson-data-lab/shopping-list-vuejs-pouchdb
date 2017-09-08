@@ -62,18 +62,23 @@
       <!-- shopping list item editor -->
       <md-list class="itemedit" v-if="mode == 'itemedit'">
         <md-list-item>
-          <md-icon>add</md-icon> <span>Moo</span>
+          <md-input-container>
+            <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @keyup.enter.native="onAddListItem"></md-input>
+          </md-input-container>
+          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
+            <md-icon class="md-primary">add</md-icon>
+          </md-button>
         </md-list-item>
-        <md-list-item v-for="item in listItems">
+        <md-list-item v-for="item in listItems" :key="item._id" :data-id="item._id">
           <div>
-            <md-checkbox v-model="item.checked" class="md-primary"></md-checkbox>
+            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem"></md-checkbox>
           </div>
           <div class="md-list-text-container">
-            <span>{{ item.title }}</span>
+            <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
           </div>
-          <md-button class="md-icon-button md-list-action">
+          <!--<md-button class="md-icon-button md-list-action">
             <md-icon class="md-primary">more_horiz</md-icon>
-          </md-button>
+          </md-button>-->
           <md-divider></md-divider>
         </md-list-item>
     
@@ -82,7 +87,7 @@
 
       <!-- list of shopping lists -->
       <md-list v-if="mode == 'showlist'">
-        <md-card v-for="list in shoppingLists" :key="list._id">     
+        <md-card v-for="list in shoppingLists" :key="list._id" :data-id="list._id">     
           <md-card-header>
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
            <!-- <div class="md-subhead">{{ list.place.title }}</div>-->
@@ -92,11 +97,11 @@
                 <md-icon>more_horiz</md-icon>
               </md-button>
             
-              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit" :data-id="list._id">
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit">
                 <md-icon>edit</md-icon>
               </md-button>
             
-              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete" :data-id="list._id">
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete">
                 <md-icon>delete</md-icon>
               </md-button>
             </md-speed-dial>
@@ -108,7 +113,7 @@
               </md-button>
           </md-card-content>-->
           <md-card-actions>
-              <md-button v-on:click="onClickList" :data-id="list._id">List</md-button>
+              <md-button v-on:click="onClickList">List</md-button>
             </md-card-actions>
         </md-card>
       </md-list>

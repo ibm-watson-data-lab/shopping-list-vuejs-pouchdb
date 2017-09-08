@@ -16,9 +16,32 @@ const sampleShoppingList = {
   "updatedAt": ""
 };
 
+const sampleListItem = {
+  "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
+  "type": "item",
+  "version": 1,
+  "title": "",
+  "checked": false,
+  "createdAt": "",
+  "updatedAt": ""
+};
+
 const clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
+
+const findDataId = function(el) {
+  console.log('fdi', el)
+  var id = el.attr('data-id');
+  if (!id) {
+    var parent = el.parent();
+    if (parent) {
+      return findDataId(parent);
+    }
+  } else {
+    return id;
+  }
+}
 
 // Vue app
 Vue.use(VueMaterial);
@@ -42,7 +65,9 @@ var app = new Vue({
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
     singleList: null,
-    listItems: []
+    listItems: [],
+    currentListId: null,
+    newItemTitle:''
   },
   created: () => {
 
@@ -73,6 +98,20 @@ var app = new Vue({
     }
   },
   methods: {
+    findUpdateDoc: function(docs, id) {
+      var doc = null;
+      for(var i in docs) {
+        if (docs[i]._id == id) {
+          doc = docs[i];
+          this.$nextTick(() => {
+            db.put(doc).then((data) => {
+              doc._rev = data.rev;
+            });
+          });
+          break;
+        }
+      }
+    },
     onClickAddShoppingList: function(e) {
       // open shopping list form
       this.singleList = clone(sampleShoppingList);
@@ -107,19 +146,10 @@ var app = new Vue({
     },
     saveList: function(id) {
       // locate this document and save it to PouchDB
-      for(var i in this.shoppingLists) {
-        if (this.shoppingLists[i]._id == id) {
-          this.$nextTick(() => {
-            db.put(this.shoppingLists[i]).then((data) => {
-              this.shoppingLists[i]._rev = data.rev;
-            });
-          })
-          break;
-        }
-      }
+      this.findUpdateDoc(this.shoppingLists, id);
     },
     onClickEdit: function(ev) {
-      var id = $(ev.target.parentNode).attr('data-id');
+      var id = findDataId($(ev.target));
       for(var i in this.shoppingLists) {
         if (this.shoppingLists[i]._id == id) {
           this.singleList = this.shoppingLists[i];
@@ -130,7 +160,7 @@ var app = new Vue({
       }
     },
     onClickDelete: function(ev) {
-      var id = $(ev.target.parentNode).attr('data-id');
+      var id = findDataId($(ev.target));
       for(var i in this.shoppingLists) {
         if (this.shoppingLists[i]._id == id) {
           db.remove(this.shoppingLists[i]).then(() => {
@@ -143,29 +173,41 @@ var app = new Vue({
     },
     onClickList: function(ev) {
       console.log('click card', ev);
-      var id = $(ev.target).attr('data-id');
-      this.mode = 'itemedit';
-      this.listItems = [
-        {
-          "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
-          "type": "item",
-          "version": 1,
-          "title": "Mangos",
-          "checked": false,
-          "createdAt": "2017-08-21T18:43:00.000Z",
-          "updatedAt": "2017-08-21T18:43:00.000Z"
+      this.currentListId = findDataId($(ev.target));
+      this.listItems = [];
+
+      var q = {
+        selector: {
+          type: 'item',
+          list: this.currentListId,
+          updatedAt: { '$gt': '' }
         },
-        {
-          "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
-          "type": "item",
-          "version": 1,
-          "title": "Apples",
-          "checked": false,
-          "createdAt": "2017-08-21T18:43:00.000Z",
-          "updatedAt": "2017-08-21T18:43:00.000Z"
-        }
-      ]
-      console.log(id);
+        sort: [ { 'updatedAt': 'desc' }]
+      };
+      db.find(q).then((data) => {
+        this.listItems = data.docs;
+        this.mode = 'itemedit';
+      });
+      console.log(this.currentListId);
+    },
+    onAddListItem: function() {
+      var obj = clone(sampleListItem);
+      obj._id = 'item:' + cuid();
+      obj.title = this.newItemTitle;
+      obj.list = this.currentListId;
+      obj.createdAt = new Date().toISOString();
+      obj.updatedAt = new Date().toISOString();
+      console.log('obj', JSON.stringify(obj));
+      db.put(obj).then( (data) => {
+        obj._rev = data.rev;
+        this.listItems.unshift(obj);
+        this.newItemTitle = '';
+      });
+    },
+    onCheckListItem: function(v, ev) {
+      var id = findDataId($(ev.target));
+      console.log('id', id)
+      this.findUpdateDoc(this.listItems, id);
     }
 
   }
