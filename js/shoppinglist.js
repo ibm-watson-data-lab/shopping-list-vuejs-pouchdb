@@ -30,8 +30,11 @@ const clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
 
+// if we have HTML like this
+// <div data-id="x"><div><span>
+// then findDataIt, given the span will recurse up the tree to
+// find a node with a data-id attribute.
 const findDataId = function(el) {
-  console.log('fdi', el)
   var id = el.attr('data-id');
   if (!id) {
     var parent = el.parent();
@@ -123,7 +126,6 @@ var app = new Vue({
     onClickSaveShoppingList: function() {
 
       // add timestamps
-      //console.log(JSON.stringify(this.singleList));
       this.singleList.updatedAt = new Date().toISOString();
 
       // add to on-screen list, if it's not there already
@@ -165,14 +167,12 @@ var app = new Vue({
         if (this.shoppingLists[i]._id == id) {
           db.remove(this.shoppingLists[i]).then(() => {
             this.shoppingLists.splice(i, 1);
-            console.log('removed');
           });
           break;
         }
       }
     },
     onClickList: function(ev) {
-      console.log('click card', ev);
       this.currentListId = findDataId($(ev.target));
       this.listItems = [];
 
@@ -188,7 +188,6 @@ var app = new Vue({
         this.listItems = data.docs;
         this.mode = 'itemedit';
       });
-      console.log(this.currentListId);
     },
     onAddListItem: function() {
       var obj = clone(sampleListItem);
@@ -197,7 +196,6 @@ var app = new Vue({
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
       obj.updatedAt = new Date().toISOString();
-      console.log('obj', JSON.stringify(obj));
       db.put(obj).then( (data) => {
         obj._rev = data.rev;
         this.listItems.unshift(obj);
@@ -206,7 +204,6 @@ var app = new Vue({
     },
     onCheckListItem: function(v, ev) {
       var id = findDataId($(ev.target));
-      console.log('id', id)
       this.findUpdateDoc(this.listItems, id);
     }
 
