@@ -69,7 +69,7 @@
             <md-icon class="md-primary">add</md-icon>
           </md-button>
         </md-list-item>
-        <md-list-item v-for="item in listItems" :key="item._id">
+        <md-list-item v-for="item in shoppingListItems" :key="item._id" v-if="item.list == currentListId">
           <div>
             <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
           </div>

@@ -58,15 +58,32 @@ var app = new Vue({
     mode: 'showlist',
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
+    shoppingListItems: [],
     singleList: null,
-    listItems: [],
     currentListId: null,
-    newItemTitle:'',
-    counts: {}
+    newItemTitle:''
   },
-
+  computed: {
+    counts: function() {
+      // calculate the counts of items and which items are checked,
+      // grouped by shopping list
+      var obj = {};
+      // count #items and how many are checked
+      for(var i in this.shoppingListItems) {
+        var d = this.shoppingListItems[i];
+        if (!obj[d.list]) {
+          obj[d.list] = { total: 0, checked: 0};
+        }
+        obj[d.list].total++;
+        if (d.checked) {
+          obj[d.list].checked++;
+        }
+      }
+      return obj;
+    }
+  },
   // called once at app startup
-  created: () => {
+  created: function() {
 
     // initialize PouchDB
     db = new PouchDB('shopping');
@@ -80,66 +97,72 @@ var app = new Vue({
           type: 'list'
         }
       };
-       return db.find(q);
+      return db.find(q);
     }).then((data) => {
 
+      // sort so that newest ones are at the top
       data.docs.sort(newestFirst);
 
       // write the data to the Vue model, and from there the web page
       app.shoppingLists = data.docs;
-      return app.updateCounts()
+
+      // get all of the shopping list items
+      var q = {
+        selector: {
+          type: 'item'
+        }
+      };
+      return db.find(q);
+    }).then((data) => {
+
+      // sort newest first
+      data.docs.sort(newestFirst);
+      app.shoppingListItems = data.docs;
     });
 
   },
   methods: {
-    // calculate the counts of items and which items are checked,
-    // grouped by shopping list
-    updateCounts: function() {
 
-      // query all the shopping list items
-      return db.find({ 
-        selector: { type: 'item' },
-        fields: ['list', 'checked']
-      }).then((data) => {
-        var obj = {};
-        // count #items and how many are checked
-        for(var i in data.docs) {
-          var d = data.docs[i];
-          if (!obj[d.list]) {
-            obj[d.list] = { total: 0, checked: 0};
-          }
-          obj[d.list].total++;
-          if (d.checked) {
-            obj[d.list].checked++;
-          }
-        }
-        this.counts = obj;
-      });
-    },
-    // given an array (docs) and document id, loop through the docs
-    // searching for the one with an _id of id. If you find it
-    // write it to PouchDB and keep the revision token
-    findUpdateDoc: function(docs, id) {
+    // given a list of docs and an id, find the doc
+    // in the list that has an _id that matches the incoming id
+    findDoc: function (docs, id) {
       var doc = null;
-      return new Promise( (resolve, reject) => {
-        for(var i in docs) {
-          if (docs[i]._id == id) {
-            doc = docs[i];
-            this.$nextTick(() => {
-              db.put(doc).then((data) => {
-                doc._rev = data.rev;
-                resolve(true)
-              });
-            });
-            break;
-          }
+      for(var i in docs) {
+        if (docs[i]._id == id) {
+          doc = docs[i];
+          break;
         }
-      });
-
+      }
+      return { i: i, doc: doc };
     },
+
+    // find the id in docs and then 
+    // write it to PouchDB and keep the revision token
+    findUpdateDoc: function (docs, id) {
+
+      // locate the doc
+      var doc = this.findDoc(docs, id).doc;
+
+      // if it exits
+      if (doc) {
+
+        // write it on the next tick (to give Vue.js chance to sync state)
+        this.$nextTick(() => {
+
+          // write to database
+          db.put(doc).then((data) => {
+
+            // retain the revision token
+            doc._rev = data.rev;
+          });
+        });
+      }
+    },
+
     // when the user has hit the big + buton to say they want to
-    // add new shopping list
-    onClickAddShoppingList: function(e) {
+    // add a new shopping list
+    onClickAddShoppingList: function() {
+
       // open shopping list form
       this.singleList = clone(sampleShoppingList);
       this.singleList._id = 'list:' + cuid();
@@ -174,58 +197,36 @@ var app = new Vue({
     onBack: function() {
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
-      this.updateCounts();
     },
 
     // the use wants to edit an individual shopping list
     // (not the items, but the meta data)
     onClickEdit: function(id, title, ev) {
-      for(var i in this.shoppingLists) {
-        if (this.shoppingLists[i]._id == id) {
-          this.singleList = this.shoppingLists[i];
-          this.pagetitle = 'Edit - ' + title;
-          this.mode='addlist';
-          break;
-        }
-      }
+      this.singleList = this.findDoc(this.shoppingLists, id).doc;
+      this.pagetitle = 'Edit - ' + title;
+      this.mode='addlist';
     },
 
     // user wants to delete a shopping list. We kill the parent document
     // but the items remain in the database
     onClickDelete: function(id) {
-      for(var i in this.shoppingLists) {
-        if (this.shoppingLists[i]._id == id) {
-          db.remove(this.shoppingLists[i]).then(() => {
-            this.shoppingLists.splice(i, 1);
-          });
-          break;
-        }
-      }
+      var match = this.findDoc(this.shoppingLists, id);
+      db.remove(match.doc).then(() => {
+        this.shoppingLists.splice(match.i, 1);
+      });
     },
 
     // the user wants to see the contents of a shopping list
     // we load it and switch views
     onClickList: function(id, title) {
-      this.currentListId = id
-      this.listItems = [];
-
-      var q = {
-        selector: {
-          type: 'item',
-          list: id
-        }
-      };
-      db.find(q).then((data) => {
-        data.docs.sort(newestFirst);
-        this.listItems = data.docs;
-        this.mode = 'itemedit';
-        this.pagetitle = title;
-      });
+      this.currentListId = id;
+      this.mode = 'itemedit';
     },
 
     // when a new shopping list item is added
     // we create a new document and write it to the db
     onAddListItem: function() {
+      if (!this.newItemTitle) return;
       var obj = clone(sampleListItem);
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
@@ -234,7 +235,7 @@ var app = new Vue({
       obj.updatedAt = new Date().toISOString();
       db.put(obj).then( (data) => {
         obj._rev = data.rev;
-        this.listItems.unshift(obj);
+        this.shoppingListItems.unshift(obj);
         this.newItemTitle = '';
       });
     },
@@ -242,9 +243,7 @@ var app = new Vue({
     // when an shopping list item is checked, we just need
     // to keep the database in step
     onCheckListItem: function(id) {
-      this.findUpdateDoc(this.listItems, id).then(() => {
-        return this.updateCounts();
-      });
+      this.findUpdateDoc(this.shoppingListItems, id);
     }
 
   }
