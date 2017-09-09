@@ -30,7 +30,7 @@ const clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
 };
 
-// sort comparison function to sort be updateAt
+// sort comparison function to sort an objected by "updateAt" field
 const  newestFirst = (a, b) => {
   if (a.updatedAt > b.updatedAt) return -1;
   if (a.updatedAt < b.updatedAt) return 1;
@@ -64,6 +64,9 @@ var app = new Vue({
     newItemTitle:''
   },
   computed: {
+
+    // computed functions return data derived from the core data.
+    // if the core data changes, then this function will be called too.
     counts: function() {
       // calculate the counts of items and which items are checked,
       // grouped by shopping list
