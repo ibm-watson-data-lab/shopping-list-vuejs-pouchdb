@@ -262,14 +262,14 @@ var app = new Vue({
 
     onClickLookup: function() {
       var r = {
-        url: 'https://openwhisk.ng.bluemix.net/api/v1/web/glynnbir@uk.ibm.com_dev/osm/query.json',
+        url: 'https://nominatim.openstreetmap.org/search',
         data: {
           format: 'json',
           q: this.singleList.place.title
         }
       }
       $.ajax(r).done((d) => { 
-        this.places = d.docs;
+        this.places = d;
       });
 
     },
