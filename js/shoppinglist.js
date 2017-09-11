@@ -212,7 +212,6 @@ var app = new Vue({
     // the use wants to edit an individual shopping list
     // (not the items, but the meta data)
     onClickEdit: function(id, title, ev) {
-      console.log('herey woo', id, title, ev)
       this.singleList = this.findDoc(this.shoppingLists, id).doc;
       this.pagetitle = 'Edit - ' + title;
       this.places = [];
@@ -286,15 +285,15 @@ var app = new Vue({
 
     },
 
+    // when a place is selected from the list, we find the object in the list
+    // and copy the lat/long, licence and name over to our database
     onChangePlace: function(v) {
       var doc = this.findDoc(this.places, v, 'place_id').doc;
-      console.log('change place', v, JSON.stringify(doc));
       this.singleList.place.lat = doc.lat;
       this.singleList.place.lon = doc.lon;
       this.singleList.place.license = doc.licence;
       this.singleList.place.address = doc.display_name;
-      console.log('change place', v, JSON.stringify(doc));
-    }
+     }
 
   }
 })
