@@ -9,7 +9,7 @@ const sampleShoppingList = {
     "license": null,
     "lat": null,
     "lon": null,
-    "address": null
+    "address": {}
   },
   "createdAt": "",
   "updatedAt": ""
@@ -266,6 +266,8 @@ var app = new Vue({
         url: 'https://nominatim.openstreetmap.org/search',
         data: {
           format: 'json',
+          addressdetails: 1, 
+          namedetails: 1,
           q: this.singleList.place.title
         }
       }
@@ -292,7 +294,7 @@ var app = new Vue({
       this.singleList.place.lat = doc.lat;
       this.singleList.place.lon = doc.lon;
       this.singleList.place.license = doc.licence;
-      this.singleList.place.address = doc.display_name;
+      this.singleList.place.address = doc.address;
      }
 
   }

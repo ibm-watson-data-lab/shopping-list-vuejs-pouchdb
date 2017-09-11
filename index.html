@@ -64,20 +64,40 @@
             </md-select>
           </md-input-container>
 
-          <md-input-container v-if="singleList.place.lat != null">
-            <label>Latitude</label>
-            <md-input readonly v-model="singleList.place.lat"></md-input>
-          </md-input-container> 
-          
-          <md-input-container v-if="singleList.place.lon != null">
-            <label>Longitude</label>
-            <md-input readonly v-model="singleList.place.lon"></md-input>
-          </md-input-container>  
+          <md-input-container v-if="singleList.place.address.road">
+            <label>Road</label>
+            <md-input readonly v-model="singleList.place.address.road"></md-input>
+          </md-input-container >
 
-          <md-input-container v-if="singleList.place.address">
-            <label>Address</label>
-            <md-input readonly v-model="singleList.place.address"></md-input>
-          </md-input-container>  
+          <md-input-container v-if="singleList.place.address.town">
+            <label>Town</label>
+            <md-input readonly v-model="singleList.place.address.town"></md-input>
+          </md-input-container >
+
+          <md-input-container v-if="singleList.place.address.city">
+            <label>City</label>
+            <md-input readonly v-model="singleList.place.address.city"></md-input>
+          </md-input-container >
+
+          <md-input-container v-if="singleList.place.address.state">
+            <label>State</label>
+            <md-input readonly v-model="singleList.place.address.state"></md-input>
+          </md-input-container >
+
+          <md-input-container v-if="singleList.place.address.postcode">
+            <label>Postcode</label>
+            <md-input readonly v-model="singleList.place.address.postcode"></md-input>
+          </md-input-container >
+
+          <md-input-container v-if="singleList.place.lat != null">
+              <label>Latitude</label>
+              <md-input readonly v-model="singleList.place.lat"></md-input>
+            </md-input-container> 
+            
+            <md-input-container v-if="singleList.place.lon != null">
+              <label>Longitude</label>
+              <md-input readonly v-model="singleList.place.lon"></md-input>
+            </md-input-container>  
 
           <md-input-container v-if="singleList.place.license">
             <label>Licence</label>
