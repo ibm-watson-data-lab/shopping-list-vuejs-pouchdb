@@ -61,7 +61,9 @@ var app = new Vue({
     shoppingListItems: [],
     singleList: null,
     currentListId: null,
-    newItemTitle:''
+    newItemTitle:'',
+    places: [],
+    selectedPlace: null
   },
   computed: {
 
@@ -128,10 +130,13 @@ var app = new Vue({
 
     // given a list of docs and an id, find the doc
     // in the list that has an _id that matches the incoming id
-    findDoc: function (docs, id) {
+    findDoc: function (docs, id, key) {
+      if (!key) {
+        key = '_id';
+      }
       var doc = null;
       for(var i in docs) {
-        if (docs[i]._id == id) {
+        if (docs[i][key] == id) {
           doc = docs[i];
           break;
         }
@@ -171,6 +176,8 @@ var app = new Vue({
       this.singleList._id = 'list:' + cuid();
       this.singleList.createdAt = new Date().toISOString();
       this.pagetitle = 'New Shopping List';
+      this.places = [];
+      this.selectedPlace = null;
       this.mode='addlist';
     },
 
@@ -205,8 +212,11 @@ var app = new Vue({
     // the use wants to edit an individual shopping list
     // (not the items, but the meta data)
     onClickEdit: function(id, title, ev) {
+      console.log('herey woo', id, title, ev)
       this.singleList = this.findDoc(this.shoppingLists, id).doc;
       this.pagetitle = 'Edit - ' + title;
+      this.places = [];
+      this.selectedPlace = null;
       this.mode='addlist';
     },
 
@@ -223,6 +233,7 @@ var app = new Vue({
     // we load it and switch views
     onClickList: function(id, title) {
       this.currentListId = id;
+      this.pagetitle = title;
       this.mode = 'itemedit';
     },
 
@@ -247,6 +258,30 @@ var app = new Vue({
     // to keep the database in step
     onCheckListItem: function(id) {
       this.findUpdateDoc(this.shoppingListItems, id);
+    },
+
+    onClickLookup: function() {
+      var r = {
+        url: 'http://nominatim.openstreetmap.org/search',
+        data: {
+          format: 'json',
+          q: this.singleList.place.title
+        }
+      }
+      $.ajax(r).done((d) => { 
+        this.places = d;
+      });
+
+    },
+
+    onChangePlace: function(v) {
+      var doc = this.findDoc(this.places, v, 'place_id').doc;
+      console.log('change place', v, JSON.stringify(doc));
+      this.singleList.place.lat = doc.lat;
+      this.singleList.place.lon = doc.lon;
+      this.singleList.place.license = doc.licence;
+      this.singleList.place.address = doc.display_name;
+      console.log('change place', v, JSON.stringify(doc));
     }
 
   }

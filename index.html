@@ -53,8 +53,36 @@
           
           <md-input-container>
             <label>Place name</label>
-            <md-input placeholder="e.g. Whole Food Markets" v-model="singleList.place.title"></md-input>
-          </md-input-container>    
+            <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>
+            <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>             
+          </md-input-container>   
+
+          <md-input-container v-if="places.length > 0">
+            <label for="movie">Choose address</label>
+            <md-select v-bind="selectedPlace" v-on:change="onChangePlace" v-bind:disabled="places.length == 0">
+              <md-option v-for="place in places" v-bind:value="place.place_id">{{ place.display_name }}</md-option>
+            </md-select>
+          </md-input-container>
+
+          <md-input-container v-if="singleList.place.lat != null">
+            <label>Latitude</label>
+            <md-input readonly v-model="singleList.place.lat"></md-input>
+          </md-input-container> 
+          
+          <md-input-container v-if="singleList.place.lon != null">
+            <label>Longitude</label>
+            <md-input readonly v-model="singleList.place.lon"></md-input>
+          </md-input-container>  
+
+          <md-input-container v-if="singleList.place.address">
+            <label>Address</label>
+            <md-input readonly v-model="singleList.place.address"></md-input>
+          </md-input-container>  
+
+          <md-input-container v-if="singleList.place.license">
+            <label>Licence</label>
+            <md-input readonly v-model="singleList.place.license"></md-input>
+          </md-input-container>  
           
         </md-card-content>
       </md-card> <!-- add new shopping list form -->
