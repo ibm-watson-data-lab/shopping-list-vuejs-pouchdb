@@ -261,6 +261,8 @@ var app = new Vue({
     },
 
     onClickLookup: function() {
+
+      // make request to the OpenStreetMap API
       var r = {
         url: 'https://nominatim.openstreetmap.org/search',
         data: {
@@ -268,8 +270,18 @@ var app = new Vue({
           q: this.singleList.place.title
         }
       }
+
+      // perform the request
       $.ajax(r).done((d) => { 
+
+        // add the list of places to our list
         this.places = d;
+
+        // if there is only one item in the list
+        if (d.length ==1) {
+          // simulate selection of first and only item
+          this.onChangePlace(d[0].place_id);
+        }
       });
 
     },

@@ -57,7 +57,7 @@
             <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>             
           </md-input-container>   
 
-          <md-input-container v-if="places.length > 0">
+          <md-input-container v-if="places.length > 1">
             <label for="movie">Choose address</label>
             <md-select v-bind="selectedPlace" v-on:change="onChangePlace" v-bind:disabled="places.length == 0">
               <md-option v-for="place in places" v-bind:value="place.place_id">{{ place.display_name }}</md-option>
