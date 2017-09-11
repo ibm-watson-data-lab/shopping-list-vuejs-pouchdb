@@ -295,6 +295,15 @@ var app = new Vue({
       this.singleList.place.lon = doc.lon;
       this.singleList.place.license = doc.licence;
       this.singleList.place.address = doc.address;
+     },
+
+     // when an item is to be deleted (not just checked), we find the object
+     // delete it in the database and delete it from the UI
+     onDeleteItem: function(id) {
+       var match = this.findDoc(this.shoppingListItems, id);
+       db.remove(match.doc).then((data) => {
+         this.shoppingListItems.splice(match.i, 1);
+       });
      }
 
   }

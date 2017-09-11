@@ -127,6 +127,9 @@
           <!--<md-button class="md-icon-button md-list-action">
             <md-icon class="md-primary">more_horiz</md-icon>
           </md-button>-->
+          <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
+              <md-icon>cancel</md-icon>
+            </md-button>
           <md-divider></md-divider>
         </md-list-item>
       </md-list> <!-- shopping list item editor -->
