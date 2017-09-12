@@ -37,6 +37,33 @@ const  newestFirst = (a, b) => {
   return 0 
 };
 
+// perform AJAX request
+const ajax = function (url, querystring) {
+  return new Promise(function(resolve, reject) {
+
+    // construct URL
+    var qs = [];
+    for(var i in querystring) { qs.push(i + '=' + encodeURIComponent(querystring[i]))}
+    url = url + '?' + qs.join('&');
+    console.log('GET', url);
+
+    // make HTTP GET request
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+      if (xmlhttp.readyState == 4) {
+        if (xmlhttp.status == 200) {
+          var obj = JSON.parse(xmlhttp.responseText);
+          resolve(obj);
+        } else {
+          reject(null);
+        }
+      }
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+  });
+};
+
 // Vue app
 Vue.use(VueMaterial);
 
@@ -266,18 +293,14 @@ var app = new Vue({
     onClickLookup: function() {
 
       // make request to the OpenStreetMap API
-      var r = {
-        url: 'https://nominatim.openstreetmap.org/search',
-        data: {
-          format: 'json',
-          addressdetails: 1, 
-          namedetails: 1,
-          q: this.singleList.place.title
-        }
-      }
-
-      // perform the request
-      $.ajax(r).done((d) => { 
+      var url = 'https://nominatim.openstreetmap.org/search';
+      var qs = {
+        format: 'json',
+        addressdetails: 1, 
+        namedetails: 1,
+        q: this.singleList.place.title
+      };
+      ajax(url, qs).then((d) => {
 
         // add the list of places to our list
         this.places = d;
