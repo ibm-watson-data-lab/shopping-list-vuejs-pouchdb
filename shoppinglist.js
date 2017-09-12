@@ -153,6 +153,9 @@ var app = new Vue({
 
       // if it exits
       if (doc) {
+        
+        // modift the updated date
+        doc.updatedAt = new Date().toISOString();
 
         // write it on the next tick (to give Vue.js chance to sync state)
         this.$nextTick(() => {
@@ -207,6 +210,7 @@ var app = new Vue({
     onBack: function() {
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
+      this.shoppingLists.sort(newestFirst);
     },
 
     // the use wants to edit an individual shopping list
