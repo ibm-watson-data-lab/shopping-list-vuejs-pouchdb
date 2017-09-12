@@ -64,10 +64,10 @@ const ajax = function (url, querystring) {
   });
 };
 
-// Vue app
+// Vue Material plugin
 Vue.use(VueMaterial);
 
-// theme
+// Vue Material theme
 Vue.material.registerTheme('default', {
   primary: 'blue',
   accent: 'white',

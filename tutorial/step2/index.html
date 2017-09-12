@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Shopping List</title>
+
+  <!-- Material Design icons and fonts  -->
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Material Design styles for Vue.js  -->
+  <link rel="stylesheet" href="https://unpkg.com/vue-material@0.7.4/dist/vue-material.css">
+
+  <!-- our styles -->
+  <link href="shoppinglist.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+   
+  <!-- vue.js app -->
+  <div id="app" class="app-viewport">
+    <!-- top bar -->
+    <md-whiteframe md-elevation="3" class="main-toolbar">
+      <md-toolbar>
+        
+        <!-- page title -->
+        <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
+
+      </md-toolbar>
+    </md-whiteframe> <!-- top bar -->
+
+
+  </div>
+  
+  <!-- Vue.js - framework that handles DOM/Model interaction -->
+  <script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
+  
+  <!-- vue-material - Material Design for Vue.js -->
+  <script src="https://unpkg.com/vue-material@0.7.4/dist/vue-material.js"></script>
+
+  <!-- our code -->
+  <script src="shoppinglist.js"></script>
+
+  </body>
+</html>
