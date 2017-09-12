@@ -63,6 +63,8 @@ Once running, you can visit http://localhost:8001 in your web browswer to see yo
 
 Your code should now look like [Tutorial Step 1 - Initial Set Up](tutorial/step1).
 
+![step1](img/step1.png)
+
 ## Creating the Vue.js App
 
 Next we need to add the Vue.js to our project. Vue.js is a JavaScript library that controls the follow of data from your JavaScript application to the HTML page, and vice versa. 
@@ -135,10 +137,123 @@ var app = new Vue({
 });
 ```
 
+The above code hands control of the div whose id is 'app' to the Vue.js framework. It now controls how that div is updated. The `data` object in the Vue object is our app's *state*. Currently, it only holds the page title and the HTML template renders that page title on the top bar of the page. 
+
+> Try altering the page title in your Developer Tools console. Type `app.pagetitle='Hello'` and your page title should update instantly. Vue.js is detecting that your app's state has changed and updates the HTML to reflect that. 
+
 Your code should now look like [Tutorial Step 2 - Initial Set Up](tutorial/step2) and in a web browser should be beginning to look like an app with a blue bar at the top.
 
+![step2](img/step2.png)
+
+## Data Model
+
+Our app is going to store two types of data
+
+- a collection of shoppping lists. Each shopping list has a name (e.g. Food) and an optional place (e.g. Walmart).
+- collection of items that are paired with a single shopping list (e.g. Bread in the Food list)
+
+Here's what a shopping list object, repsresented as JSON, would look like:
+
+```js
+{
+  "_id": "list:cj6mj1zfj000001n1ugjfkj33",
+  "type": "list",
+  "version": 1,
+  "title": "Groceries",
+  "checked": false,
+  "place": {
+    "title": "Healthy Living"
+  },
+  "createdAt": "2017-08-21T18:40:00.000Z",
+  "updatedAt": "2017-08-21T18:40:00.000Z"
+}
+```
+
+Notice that `_id` of the document consists of the data type (list) and a unique identifier. We also represent the data type in the 'type' field and the other fields are self-explantory.
+
+A shopping list item, is even simpler:
+
+```js
+{
+  "_id": "item:cj6mn7e36000001p9n14fgk6s",
+  "type": "item",
+  "list": "list:cj6mj1zfj000001n1ugjfkj33",
+  "version": 1,
+  "title": "Mangos",
+  "checked": false,
+  "createdAt": "2017-08-21T18:43:00.000Z",
+  "updatedAt": "2017-08-21T18:43:00.000Z"
+}
+```
+
+It contains a reference to the id of list in which it belongs.
+
+If we want to store a collection of shopping lists and a collection of items in our Vue.js app, all we need to do is add two arrays to the `data` object in our app:
+
+```js
+// this is the Vue.js app
+var app = new Vue({
+  el: '#app',
+  data: {
+    pagetitle: 'Shopping Lists',
+    shoppingLists: [],
+    shoppingListItems: []
+  }
+});
+```
+
+It's that simple. Next, in index.html, we want to render the `shoppingLists` array. This is acheived by with two components:
+
+- the [md-list tag](http://vuematerial.io/#/components/list) from the Vue Material library to render a Material Design list item
+- the [v-for directive](https://vuejs.org/v2/guide/list.html) from the Vue.js library to iterate over each item in the `shoppingLists` array
+- the [v-bind directive](https://vuejs.org/v2/guide/class-and-style.html) (represented here as `:key` and `:data-id`) to add attributes to HTML tags from our shoppingList object
+- [curly bracket template syntax](https://vuejs.org/v2/guide/syntax.html) to surface data from our shoppingList object on the page
+
+Place this code below your top bar in the index.html file:
+
+```html
+      <!-- list of shopping lists -->
+      <md-list>
+        <md-card v-for="list in shoppingLists" :key="list._id" :data-id="list._id">     
+          <md-card-header>
+            <div class="md-title">{{ list.title }}</div>
+            <div class="md-subhead">{{ list.place.title }}</div>
+          </md-card-header>
+        </md-card>
+      </md-list> <!-- list of shopping lists -->
+```
+
+You still won't see any data on your web page because the `shoppingList` array is empty. Let's simulate the addition of a new shopping list be running a command on the browser's Developer Tools console:
+
+```js
+var obj = {_id:'list:1',type:'list',version:1,title:'Food',checked:false,place:{title:'Whole Foods'},createdAt: '', updatedAt:''}
+app.shoppingLists.push(obj);
+```
+
+Let's tidy up the styling, by adding the following to your shoppinglist.css file:
+
+```css
+body {
+  background-color: #9e9e9e
+}
+
+.md-theme-default.md-card {
+  background-color: white !important;
+  margin:20px
+}
+```
+
+Your code should now look like [Tutorial Step 3 - Initial Set Up](tutorial/step3) and in a web browser should show any lists you manually push into the app's `shoppingList` array:
+
+![step3](img/step3.png)
 
 
+
+## To do
+|
+|
+|
+v
 
 First we'll need to include some extra JavaScript files in your index.html
 * Adding a PouchDB Database
