@@ -428,6 +428,139 @@ Your code should now look like [Tutorial Step 4 - Initial Set Up](tutorial/step4
 
 Next we need to add a way to save the list!
 
+## Storing the new shopping list
+
+Saving the shopping list is very simple. We just need to add the `singleList` object to the start of our `shoppingLists` array in our Vue.js app. First we need a button that indicates the user wants to save the list (rather than press "back" and cancel the operatio). For this we need a button in our `md-toolbar` tag that only displays in `addlist` mode:
+
+```html
+        <!-- save new shopping list button -->
+        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0">
+          <md-icon>check</md-icon>
+        </md-button>
+```
+
+This button remains disabled until the length of the `singleList.title` is greater than zero, so we can't save a list without a title. We also need to add a `onClickSaveShoppingList` to our Vue.js app methods to handle the form submission:
+
+```js
+    onClickSaveShoppingList: function() {
+      this.singleList.updatedAt = new Date().toISOString();
+      this.shoppingLists.unshift(this.singleList);
+      this.onBack();
+    }
+```
+
+Your app should now save and display any number of shopping lists!
+
+Let's go one stage further and add a button to show and edit the items on a list. First we need a new Vue.js data item to store the id of the list being viewed (currentListId) and a variable to store the new item title (newItemTitle):
+
+```js
+  data: {
+    pagetitle: 'Shopping Lists',
+    shoppingLists: [],
+    shoppingListItems: [],
+    mode: 'showlist',
+    singleList: null,
+    currentListId: null,
+    newItemTitle:''
+  }
+```
+
+Inside the `md-card` markup, we can add a new final section that displays a button against each shopping list card:
+
+```html
+          <md-card-actions>
+            <md-button v-on:click="onClickList(list._id, list.title)">
+                <md-icon>chevron_right</md-icon>
+            </md-button>
+          </md-card-actions>
+```
+
+When the button is clicked, it calls `onClickList` button, passing it the id of the list and its name. Let's add a Vue.js method to handle that event:
+
+```js
+    // the user wants to see the contents of a shopping list
+    // we load it and switch views
+    onClickList: function(id, title) {
+      this.currentListId = id;
+      this.pagetitle = title;
+      this.mode = 'itemedit';
+    }
+```
+
+This sets the `currentListId`, changes the page title and switches the app's mode to `itemedit`. Let's add some new markup that is rendered when we are in `itemedit` mode:
+
+```html
+      <!-- shopping list item editor -->
+      <md-list class="itemedit" v-if="mode == 'itemedit'">
+        <md-list-item>
+          <md-input-container>
+            <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @keyup.enter.native="onAddListItem"></md-input>
+          </md-input-container>
+          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
+            <md-icon class="md-primary">add</md-icon>
+          </md-button>
+        </md-list-item>
+        <md-list-item v-for="item in shoppingListItems" :key="item._id" v-if="item.list == currentListId">
+          <div class="md-list-text-container">
+            {{ item.title }}
+          </div>
+        </md-list-item>
+      </md-list> <!-- shopping list item editor -->
+```
+
+This consists of:
+
+- a form at the top to allow new list items to be added
+- an 'add' button
+- a list of shopping list items
+
+Notice how the `md-list-item` doesn't display ALL the list items, only the ones that belong to the `currentListId`. Also see how the `onAddListItem` function can be called by pressing the enter key on the input control, or by clicking add button. 
+
+We need a new object template for a list item:
+
+```js
+const sampleListItem = {
+  "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
+  "type": "item",
+  "version": 1,
+  "title": "",
+  "checked": false,
+  "createdAt": "",
+  "updatedAt": ""
+};
+```
+
+and an `onAddListItem` method on our Vue.js app:
+
+```js 
+    onAddListItem: function() {
+      if (!this.newItemTitle) return;
+      var obj = JSON.parse(JSON.stringify(sampleListItem));
+      obj._id = 'item:' + cuid();
+      obj.title = this.newItemTitle;
+      obj.list = this.currentListId;
+      obj.createdAt = new Date().toISOString();
+      obj.updatedAt = new Date().toISOString();
+      this.shoppingListItems.unshift(obj);
+      this.newItemTitle = '';
+    }
+```
+
+and finally, a tiny piece of CSS:
+
+```css
+.itemedit {
+  background-color: white !important
+}
+```
+
+Now your app should allow multiple lists to be defined, each with their own separate list items.
+
+Your code should now look like [Tutorial Step 5 - Initial Set Up](tutorial/step5):
+
+![step5](img/step5.png)
+
+Now let's deal with checking items from the shopping list.
 
 ## To do
 |

@@ -1,0 +1,25 @@
+body {
+  background-color: #9e9e9e
+}
+
+.md-theme-default.md-card {
+  background-color: white !important;
+  margin:20px
+}
+
+.main-toolbar{
+  position:sticky;
+  top:0px;
+  z-index:1000;
+}
+
+.floatingbutton {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  z-index: 1000;
+}
+
+.itemedit {
+  background-color: white !important
+}

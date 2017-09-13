@@ -197,7 +197,7 @@ var app = new Vue({
     onClickAddShoppingList: function() {
 
       // open shopping list form
-      this.singleList = Vue.util.extend({}, sampleShoppingList);
+      this.singleList = JSON.parse(JSON.stringify(sampleShoppingList));
       this.singleList._id = 'list:' + cuid();
       this.singleList.createdAt = new Date().toISOString();
       this.pagetitle = 'New Shopping List';
@@ -266,7 +266,7 @@ var app = new Vue({
     // we create a new document and write it to the db
     onAddListItem: function() {
       if (!this.newItemTitle) return;
-      var obj = Vue.util.extend({}, sampleListItem);
+      var obj = JSON.parse(JSON.stringify(sampleListItem));
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
       obj.list = this.currentListId;
