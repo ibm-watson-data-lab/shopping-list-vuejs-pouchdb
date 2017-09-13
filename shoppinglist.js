@@ -25,11 +25,6 @@ const sampleListItem = {
   "updatedAt": ""
 };
 
-// clone an object
-const clone = function(obj) {
-  return JSON.parse(JSON.stringify(obj));
-};
-
 // sort comparison function to sort an objected by "updateAt" field
 const  newestFirst = (a, b) => {
   if (a.updatedAt > b.updatedAt) return -1;
@@ -202,7 +197,7 @@ var app = new Vue({
     onClickAddShoppingList: function() {
 
       // open shopping list form
-      this.singleList = clone(sampleShoppingList);
+      this.singleList = Vue.util.extend({}, sampleShoppingList);
       this.singleList._id = 'list:' + cuid();
       this.singleList.createdAt = new Date().toISOString();
       this.pagetitle = 'New Shopping List';
@@ -271,7 +266,7 @@ var app = new Vue({
     // we create a new document and write it to the db
     onAddListItem: function() {
       if (!this.newItemTitle) return;
-      var obj = clone(sampleListItem);
+      var obj = Vue.util.extend({}, sampleListItem);
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
       obj.list = this.currentListId;

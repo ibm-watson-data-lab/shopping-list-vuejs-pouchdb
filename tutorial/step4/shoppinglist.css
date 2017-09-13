@@ -12,3 +12,10 @@ body {
   top:0px;
   z-index:1000;
 }
+
+.floatingbutton {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  z-index: 1000;
+}

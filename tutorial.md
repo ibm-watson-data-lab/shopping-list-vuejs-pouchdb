@@ -85,6 +85,9 @@ These are the fonts and styles required to turn a plain HTML app into one that a
 We also need some extra JavaScript objects at the bottom of our index.html file, just above the line that includes our shoppinglist.js file:
 
 ```html
+ <!-- cuid - unique id generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
+
   <!-- Vue.js - framework that handles DOM/Model interaction -->
   <script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
 
@@ -247,6 +250,183 @@ Your code should now look like [Tutorial Step 3 - Initial Set Up](tutorial/step3
 
 ![step3](img/step3.png)
 
+## Adding a shopping list
+
+To be able to add a shopping list via our app, we need
+
+- a button that takes to a "add shopping list" page
+- a form to collect the title and place name of the shopping list
+- some logic in our app to collect the form data and add it to the `shoppingList` array
+
+First of all, we need to flip between "pages" in our app. This is a single page web app (so only one index.html file) so the concept of a page switch is something of an optical illusion. We simply flip the page title to "New Shopping List", add a back button to get back to the first page and stop displaying the list of shopping lists when we are in `addlist` mode.
+
+Let's add a `mode` to the data object in our app and set it to `showlist` at startup:
+
+```js
+var app = new Vue({
+  el: '#app',
+  data: {
+    pagetitle: 'Shopping Lists',
+    shoppingLists: [],
+    shoppingListItems: [],
+    mode: 'showlist'
+  }
+});
+```
+
+and add `v-if` in our `index.html` to ensure that the list of shopping lists is only shown in `showlist` mode:
+
+```html
+    <!-- list of shopping lists -->
+    <md-list v-if="mode == 'showlist'">
+```
+
+We can then add a floating button to our `index.html` which is clicked when the user wants to add a new shopping list. Add this code as the last item of your "app" div:
+
+```html
+      <!-- floating 'add shopping list' button -->
+      <div class="floatingbutton" v-if="mode == 'showlist'">
+        <md-button class="md-fab md-primary md-raised" v-on:click="onClickAddShoppingList">
+          <md-icon>add</md-icon>
+        </md-button>
+      </div> <!-- floating 'add shopping list' button -->
+```
+
+The above button expects a `onClickAddShoppingList` function to exist on your app, so let's add that as a 'method' to our Vue.js app:
+
+```js
+var app = new Vue({
+  el: '#app',
+  data: {
+    pagetitle: 'Shopping Lists',
+    shoppingLists: [],
+    shoppingListItems: [],
+    mode: 'showlist'
+  },
+  methods: {
+    onClickAddShoppingList: function() {
+
+      // open shopping list form
+      this.pagetitle = 'New Shopping List';
+      this.mode='addlist';
+    }
+  }
+});
+```
+
+and some new CSS:
+
+```css
+.floatingbutton {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  z-index: 1000;
+}
+```
+
+We can test that now. Your app should have a blue '+' button in the bottom right, which when clicked enters 'addlist' mode. But we have no means of getting back! Let's fix that by adding a back button as the first thing in our 'md-toolbar' markup in `index.html`:
+
+```html
+        <!-- back button -->
+        <md-button class="md-icon-button" v-if="mode != 'showlist'" v-on:click="onBack">
+            <md-icon>arrow_back</md-icon>
+        </md-button>
+```
+
+The button is programmed to only appear when not in 'showlist' mode, but we need to add its handler function `onBack` to the Vue.js app's `methods` object:
+
+```js
+    // when someone clicks 'back', restore the home screen
+    onBack: function() {
+      this.mode='showlist';
+      this.pagetitle='Shopping Lists';
+    }
+```
+
+Your web app should now allow you to navigate between your two screens. 
+
+Let's add a new object to our Vue.js app to represent new shopping list:
+
+```js
+  .
+  .
+  data: {
+    pagetitle: 'Shopping Lists',
+    shoppingLists: [],
+    shoppingListItems: [],
+    mode: 'showlist',
+    singleList: null
+  }
+  .
+  .
+
+```
+
+and a global constant that represents the structure of a shopping list object:
+
+```js
+const sampleShoppingList = {
+  "_id": "",
+  "type": "list",
+  "version": 1,
+  "title": "",
+  "checked": false,
+  "place": {
+    "title": "",
+    "license": null,
+    "lat": null,
+    "lon": null,
+    "address": {}
+  },
+  "createdAt": "",
+  "updatedAt": ""
+};
+```
+
+which we can use to populate `singleList` when the `onClickAddShoppingList` function is called:
+
+```js
+
+    onClickAddShoppingList: function() {
+
+      // open shopping list form
+      this.pagetitle = 'New Shopping List';
+      this.mode='addlist';
+      this.singleList = Vue.util.extend({}, sampleShoppingList);
+      this.singleList._id = 'list:' + cuid();
+      this.singleList.createdAt = new Date().toISOString();
+    }
+```
+
+Now we need to display a form when in 'addlist' mode. Add the following markup to your index.html:
+
+```html
+     <!-- add new shopping list form-->
+      <md-card v-if="mode == 'addlist'">
+        <md-card-header>Add Shopping List</md-card-header>
+        <md-card-content>
+          <md-input-container>
+            <label>List name</label>
+            <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
+          </md-input-container>   
+          
+          <md-input-container>
+            <label>Place name</label>
+            <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>            
+          </md-input-container>   
+
+        </md-card-content>
+      </md-card> <!-- add new shopping list form -->
+```
+
+Try out your app. When you click the "+" button, you should see a form. Fill in the values and inspect `app.singleList` in your developer tools console to see the values you have typed. This is Vue.js magic working in reverse: moving data from the web page in your your JavaScript app seamlessly.
+
+Your code should now look like [Tutorial Step 4 - Initial Set Up](tutorial/step4):
+
+![step4](img/step4.png)
+
+Next we need to add a way to save the list!
 
 
 ## To do

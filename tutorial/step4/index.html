@@ -22,6 +22,11 @@
     <!-- top bar -->
     <md-whiteframe md-elevation="3" class="main-toolbar">
       <md-toolbar>
+
+        <!-- back button -->
+        <md-button class="md-icon-button" v-if="mode != 'showlist'" v-on:click="onBack">
+            <md-icon>arrow_back</md-icon>
+        </md-button>
         
         <!-- page title -->
         <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
@@ -29,8 +34,25 @@
       </md-toolbar>
     </md-whiteframe> <!-- top bar -->
 
+    <!-- add new shopping list form-->
+    <md-card v-if="mode == 'addlist'">
+      <md-card-header>Add Shopping List</md-card-header>
+      <md-card-content>
+        <md-input-container>
+          <label>List name</label>
+          <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
+        </md-input-container>   
+        
+        <md-input-container>
+          <label>Place name</label>
+          <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>            
+        </md-input-container>   
+
+      </md-card-content>
+    </md-card> <!-- add new shopping list form -->
+
     <!-- list of shopping lists -->
-    <md-list>
+    <md-list v-if="mode == 'showlist'">
       <md-card v-for="list in shoppingLists" :key="list._id" :data-id="list._id">     
         <md-card-header>
           <div class="md-title">{{ list.title }}</div>
@@ -38,6 +60,13 @@
         </md-card-header>
       </md-card>
     </md-list> <!-- list of shopping lists -->
+
+    <!-- floating 'add shopping list' button -->
+    <div class="floatingbutton" v-if="mode == 'showlist'">
+      <md-button class="md-fab md-primary md-raised" v-on:click="onClickAddShoppingList">
+        <md-icon>add</md-icon>
+      </md-button>
+    </div> <!-- floating 'add shopping list' button -->
 
   </div>
   
