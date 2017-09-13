@@ -144,11 +144,11 @@ The above code hands control of the div whose id is 'app' to the Vue.js framewor
 
 > Try altering the page title in your Developer Tools console. Type `app.pagetitle='Hello'` and your page title should update instantly. Vue.js is detecting that your app's state has changed and updates the HTML to reflect that. 
 
-Your code should now look like [Tutorial Step 2 - Initial Set Up](tutorial/step2) and in a web browser should be beginning to look like an app with a blue bar at the top.
+Your code should now look like [Tutorial Step 2 - Creating the Vue.js App](tutorial/step2) and in a web browser should be beginning to look like an app with a blue bar at the top.
 
 ![step2](img/step2.png)
 
-## Data Model
+## Adding data
 
 Our app is going to store two types of data
 
@@ -246,7 +246,7 @@ body {
 }
 ```
 
-Your code should now look like [Tutorial Step 3 - Initial Set Up](tutorial/step3) and in a web browser should show any lists you manually push into the app's `shoppingList` array:
+Your code should now look like [Tutorial Step 3 - IAdding data](tutorial/step3) and in a web browser should show any lists you manually push into the app's `shoppingList` array:
 
 ![step3](img/step3.png)
 
@@ -422,7 +422,7 @@ Now we need to display a form when in 'addlist' mode. Add the following markup t
 
 Try out your app. When you click the "+" button, you should see a form. Fill in the values and inspect `app.singleList` in your developer tools console to see the values you have typed. This is Vue.js magic working in reverse: moving data from the web page in your your JavaScript app seamlessly.
 
-Your code should now look like [Tutorial Step 4 - Initial Set Up](tutorial/step4):
+Your code should now look like [Tutorial Step 4 - Adding a shopping list](tutorial/step4):
 
 ![step4](img/step4.png)
 
@@ -556,11 +556,50 @@ and finally, a tiny piece of CSS:
 
 Now your app should allow multiple lists to be defined, each with their own separate list items.
 
-Your code should now look like [Tutorial Step 5 - Initial Set Up](tutorial/step5):
+Your code should now look like [Tutorial Step 5 - Storing the new shopping list](tutorial/step5):
 
 ![step5](img/step5.png)
 
 Now let's deal with checking items from the shopping list.
+
+## Checking items
+
+Check an item is a simple matter of setting the `checked` flag for a shopping list item. This is where Vue.js really helps. We can create HTML checkbox which is tied to the `checked` flag of each item in the shopping list and Vue.js will do the rest.
+
+Put the following code in the `v-for` loop of the shopping list editor section of our index.html file:
+
+```html
+          <div>
+            <md-checkbox v-model="item.checked" class="md-primary"></md-checkbox>
+          </div>
+```
+
+and we're going to add a CSS class called "cardchecked" to every item that has been checked, by adding some extra markup around our rendering of the `item.title`: 
+
+```html
+            <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
+```
+
+Finally, adding some extra CSS:
+
+```css
+.cardchecked {
+  text-decoration: line-through;
+  color: #ccc
+}
+```
+
+That's it! You should now be able to check items from your shopping lists. Check items should appear grey and crossed out.
+
+Your code should now look like [Tutorial Step 6 - checking items](tutorial/step5):
+
+![step6](img/step6.png)
+
+Now we need to add a database to permenantly store the data between sessions. This is where PouchDB comes in.
+
+## Adding a PouchDB database
+
+
 
 ## To do
 |
