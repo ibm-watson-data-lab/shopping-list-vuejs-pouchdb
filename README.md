@@ -52,10 +52,14 @@ Shopping List is a simple demo app, with a limited feature set. Here is a list o
 
 ### Table of Contents
 
-* Prerequisite Knowledge & Skills
-* Key Concepts
-* Initial Set Up
-* Creating the Vue.js App
+* [Prerequisite Knowledge & Skills](blob/master/tutorial.md#prerequisite-knowledge--skills)
+* [Key Concepts](blob/master/tutorial.md#key-concepts)
+* [Initial Set Up](blob/master/tutorial.md#initial-set-up)
+* [Creating the Vue.js App](blob/master/tutorial.md#creating-the-vuejs-app)
+* [Adding Data](blob/master/tutorial.md#adding-data)
+* [Adding a shopping list](blob/master/tutorial.md#adding-a-shopping-list)
+* [Storing the new shopping list](blob/master/tutorial.md#storing-the-new-shopping-list)
+* [Checking items](blob/master/tutorial.md#checking-items)
 * Adding a PouchDB Database
 * Syncing Data
   * Configure a Database
