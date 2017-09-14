@@ -1,3 +1,8 @@
+
+// this will be the PouchDB database
+var db = new PouchDB('shopping');
+
+// template shopping list
 const sampleShoppingList = {
   "_id": "",
   "type": "list",
@@ -15,8 +20,9 @@ const sampleShoppingList = {
   "updatedAt": ""
 };
 
+// template shopping list item
 const sampleListItem = {
-  "_id": "list:cj6mj1zfj000001n1ugjfkj33:item:cj6mn7e36000001p9n14fgk6s",
+  "_id": "",
   "type": "item",
   "version": 1,
   "title": "",
@@ -68,10 +74,7 @@ Vue.material.registerTheme('default', {
   accent: 'white',
   warn: 'red',
   background: 'grey'
-})
-
-// this will be the PouchDB database
-var db = null;
+});
 
 // this is the Vue.js app
 var app = new Vue({
@@ -112,13 +115,10 @@ var app = new Vue({
   // called once at app startup
   created: function() {
 
-    // initialize PouchDB
-    db = new PouchDB('shopping');
-
-    // create database index ordered by updatedAt date
+    // create database index on 'type'
     db.createIndex({ index: { fields: ['type'] }}).then(() => {
       
-      // load all 'list' items ordered by updated date
+      // load all 'list' items 
       var q = {
         selector: {
           type: 'list'

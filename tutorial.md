@@ -673,6 +673,108 @@ Now we need to add a database to permenantly store the data between sessions. Th
 
 ## Adding a PouchDB database
 
+PouchDB is an in-browser database. It allows your application state to be retained between site visits without sending any data to a server-side process. PouchDB can sync with a remote Apache CouchDB or IBM Cloudant service, but for now we are going to concentrate on making the app store its shopping lists and shopping list items in a PouchDB database.
+
+PouchDB stores JSON documents, which is ideal for storing our shopping list and shopping list item objects. Our objects a distinguished by their `type` attribute ('list', or 'item') so we can store our data in the same database. Storing the same objects in the same table would be unusual for a relational database, but with document stores this is a common design pattern.
+
+First we need to import the PouchDB libraries into our HTML file, above the line that imports our `shoppinglist.js` file:
+
+```html
+  <!-- PouchDB - in-browser database -->
+  <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.find.min.js"></script>
+```
+
+At the top of our `shoppinglist.js` we need to initialise a PouchDB database:
+
+```js
+var db = new PouchDB('shopping');
+```
+
+The `db` object is then ready to use immediately. We need to revist our `onClickSaveShoppingList` functions to add code to make it save the data to the datbase:
+
+```js
+    onClickSaveShoppingList: function() {
+
+      // add timestamps
+      this.singleList.updatedAt = new Date().toISOString();
+
+      // add to on-screen list
+      this.shoppingLists.unshift(this.singleList);
+
+      // write to database
+      db.put(this.singleList).then((data) => {
+        // keep the revision tokens
+        this.singleList._rev = data.rev;
+
+        // switch mode
+        this.onBack();
+      });
+    }
+```
+
+The `db.put` function writes the new object to the database. It returns to us an object containing a revision token `_rev`. We store this in our object, in case we need to update the same document in the future. 
+
+We also need to revisit our `onAddListItem` function to add the database logic for shopping list items too:
+
+```js
+    onAddListItem: function() {
+      if (!this.newItemTitle) return;
+      var obj = JSON.parse(JSON.stringify(sampleListItem));
+      obj._id = 'item:' + cuid();
+      obj.title = this.newItemTitle;
+      obj.list = this.currentListId;
+      obj.createdAt = new Date().toISOString();
+      obj.updatedAt = new Date().toISOString();
+      db.put(obj).then( (data) => {
+        obj._rev = data.rev;
+        this.shoppingListItems.unshift(obj);
+        this.newItemTitle = '';
+      });
+    }
+```
+
+This should be enough to store shopping lists and their items in the database. Now we need to make sure the data is loaded when the website is first loaded. Vue.js calls a `created` function when it first starts up - we can put our startup code in there:
+
+```js
+  // called once at app startup
+  created: function() {
+
+    // create database index on the 'type' field
+    db.createIndex({ index: { fields: ['type'] }}).then(() => {
+      
+      // load all 'list' items 
+      var q = {
+        selector: {
+          type: 'list'
+        }
+      };
+      return db.find(q);
+    }).then((data) => {
+
+      // write the data to the Vue model, and from there the web page
+      app.shoppingLists = data.docs;
+
+      // get all of the shopping list items
+      var q = {
+        selector: {
+          type: 'item'
+        }
+      };
+      return db.find(q);
+    }).then((data) => {
+      app.shoppingListItems = data.docs;
+    });
+  }
+```
+
+The above `created` function first creates an index on the the document's type field. This makes queries on this field more performant. We then follow the index creation with two queries: one for the shopping lists, the other for the shopping list items. The queries are expressed as a JSON object (see [Mango queries](https://pouchdb.com/guides/mango-queries.html)), where the 'selector' attribute describes the portion of the data to retrieve. The resultant data is stored directly in our app's `shoppingList` and `shoppingListItems` array.
+
+Your code should now look like [Tutorial Step 8 - Adding a PouchDB database](tutorial/step8):
+
+![step8](img/step8.png)
+
+We're nearly there! Just a few more loose ends to tie up before we're done.s
 
 
 ## To do

@@ -52,6 +52,8 @@ Shopping List is a simple demo app, with a limited feature set. Here is a list o
 
 ### Table of Contents
 
+[Tutorial](tutorial.md)
+
 * [Prerequisite Knowledge & Skills](tutorial.md#prerequisite-knowledge--skills)
 * [Key Concepts](tutorial.md#key-concepts)
 * [Initial Set Up](tutorial.md#initial-set-up)
@@ -60,7 +62,7 @@ Shopping List is a simple demo app, with a limited feature set. Here is a list o
 * [Adding a shopping list](tutorial.md#adding-a-shopping-list)
 * [Storing the new shopping list](tutorial.md#storing-the-new-shopping-list)
 * [Checking items](tutorial.md#checking-items)
-* Adding a PouchDB Database
+* [Adding a PouchDB Database](tutorial.md#adding-a-pouchdb-database)
 * Syncing Data
   * Configure a Database
      * Option 1: Apache CouchDB
