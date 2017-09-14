@@ -591,9 +591,83 @@ Finally, adding some extra CSS:
 
 That's it! You should now be able to check items from your shopping lists. Check items should appear grey and crossed out.
 
-Your code should now look like [Tutorial Step 6 - checking items](tutorial/step5):
+Your code should now look like [Tutorial Step 6 - checking items](tutorial/step6):
 
 ![step6](img/step6.png)
+
+Next up, we need to know how many items are ticked and how many are left on each list. Read on.
+
+
+## Adding list counts
+
+Next to each shopping list we need to display:
+
+- how many items are checked in the list
+- the total number of items in the list
+
+e.g. Food 6/14
+
+This requires us to instruct Vue.js to compute these aggregated values every time the underlying `shoppingListItem` array changes. Luckily, Vue.js has the concept of [computed properties](https://vuejs.org/v2/guide/computed.html) - we simply have to provide the aggregation function and the values can be automatically reflected in the markup.
+
+First we add a new objected called `computed` in our Vue.js app:
+
+```js
+var vm = new Vue({
+  el: '#app',
+  data: {
+    ...
+  },
+  computed: {
+  }
+```
+
+The `computed` object can contain any number of functions - one per computed value. We are going to add a new function called `counts` into the `computed` object:
+
+```js
+  computed: {
+    counts: function() {
+      // calculate the counts of items and which items are checked,
+      // grouped by shopping list
+      var obj = {};
+      // count #items and how many are checked
+      for(var i in this.shoppingListItems) {
+        var d = this.shoppingListItems[i];
+        if (!obj[d.list]) {
+          obj[d.list] = { total: 0, checked: 0};
+        }
+        obj[d.list].total++;
+        if (d.checked) {
+          obj[d.list].checked++;
+        }
+      }
+      return obj;
+    }
+  }
+```
+
+This function iterates over the app's `shoppingListItems` array building up an object that contains `total` and `checked` for each list e.g.
+
+```js
+{
+  'list:1': { checked:4, total:26 },
+  'list:2': { checked:0, total:3 },
+  'list:3': { checked:0, total:0 }
+}
+```
+
+We can then use `counts` in our `md-card` the displays each shopping list:
+
+```html
+          <md-card-content v-if="counts[list._id]">
+            {{ counts[list._id].checked }} / {{ counts[list._id].total }} 
+          </md-card-content>
+```
+
+Now our shopping list will contain a summary counts of the shopping list items.
+
+Your code should now look like [Tutorial Step 7 - Adding list counts](tutorial/step7):
+
+![step7](img/step7.png)
 
 Now we need to add a database to permenantly store the data between sessions. This is where PouchDB comes in.
 
