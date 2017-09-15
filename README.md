@@ -54,6 +54,7 @@ This [Tutorial](tutorial.md) will show you how to build this app step-by-step.
 * [Adding a shopping list](tutorial.md#adding-a-shopping-list)
 * [Storing the new shopping list](tutorial.md#storing-the-new-shopping-list)
 * [Checking items](tutorial.md#checking-items)
+* [Adding list counts](tutorial.md#adding-list-counts)
 * [Adding a PouchDB Database](tutorial.md#adding-a-pouchdb-database)
 * [Checkbox events](tutorial.md#checkbox-events)
 * [Making a PWA](tutorial.md#making-a-pwa)
