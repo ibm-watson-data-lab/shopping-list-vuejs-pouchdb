@@ -774,32 +774,111 @@ Your code should now look like [Tutorial Step 8 - Adding a PouchDB database](tut
 
 ![step8](img/step8.png)
 
-We're nearly there! Just a few more loose ends to tie up before we're done.s
+We're nearly there! Just a few more loose ends to tie up before we're done.
 
+## Checkbox events
 
-## To do
-|
-|
-|
-v
+You may have noticed that when you tick or untick a shopping list item, the data is not saved to the database. Vue.js makes sure that the front end and the JavaScript app are in sync, but at the moment we are manually writing changes from the `shoppingLists` and `shoppingListItems` arrays to the database.
 
-First we'll need to include some extra JavaScript files in your index.html
-* Adding a PouchDB Database
-* Syncing Data
-  * Configure a Database
-     * Option 1: Apache CouchDB
-     * Option 2: IBM Cloudant
-     * Option 3: Cloudant Developer Edition
-  * Configure Remote Database Credentials
-  * Trigger Database Replication
-* Adding Multi-User / Multi-Device Features with Hoodie
-  * Installing Hoodie
-  * Configuring Hoodie
-  * Using the Hoodie Store API
-  * Using Hoodie Account API
-  * Testing Offline Sync
-* Adding Gelocation Features
-* What's next?
-  * Other Features
-  * Get Involved in the Offline First Community!
-  * Further Reading and Resources
+To close this loophole we need to add two more utility methods to our app to locate and save items:
+
+```js
+    // given a list of docs and an id, find the doc
+    // in the list that has an _id that matches the incoming id
+    findDoc: function (docs, id, key) {
+      if (!key) {
+        key = '_id';
+      }
+      var doc = null;
+      for(var i in docs) {
+        if (docs[i][key] == id) {
+          doc = docs[i];
+          break;
+        }
+      }
+      return { i: i, doc: doc };
+    },
+
+    // find the id in docs and then 
+    // write it to PouchDB and keep the revision token
+    findUpdateDoc: function (docs, id) {
+
+      // locate the doc
+      var doc = this.findDoc(docs, id).doc;
+
+      // if it exits
+      if (doc) {
+        
+        // modift the updated date
+        doc.updatedAt = new Date().toISOString();
+
+        // write it on the next tick (to give Vue.js chance to sync state)
+        this.$nextTick(() => {
+
+          // write to database
+          db.put(doc).then((data) => {
+
+            // retain the revision token
+            doc._rev = data.rev;
+          });
+        });
+      }
+    },
+```
+
+and add a method that will be called when a shopping list item is checked:
+
+```js
+    // when an shopping list item is checked, we just need
+    // to keep the database in step
+    onCheckListItem: function(id) {
+      this.findUpdateDoc(this.shoppingListItems, id);
+    }
+```
+
+Then we modify our checkbox markup to get it to call `onCheckListItem` when the value changes:
+
+```html
+            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
+```
+
+Your code should now look like [Tutorial Step 9 - Checkbox events](tutorial/step9):
+
+## Making a PWA
+
+The final step in our tutorial is to make our application into a Progressive Web App (PWA). A PWA is web application that can be "installed" on a mobile device with an icon on the home screen, just like a native mobile app. To achieve this we need the following components:
+
+- a manifest.json in the same directory as your index.html file (copy [this one](manifest.json)). The manifest file contains your PWA's meta data including app name, icon urls and colour information.
+- a Service Worker, which is a JavaScript process dedicated to your app that controls all the web traffic your app initiates. This allows the Service Worker to cache assets for offline access. Copy [this one](worker.js)
+- some icons. Take [icon128x128.png](icon128x128.png) & [icon512x512.png](icon512x512.png)
+
+You'll also need some additional lines in the `<head>` section of your index.html:
+
+```html
+  <!-- mobile styling -->
+  <meta name="theme-color" content="#448AFF">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#448AFF">
+  <meta name="apple-mobile-web-app-title" content="Shopping List">
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+```
+
+That's it! Your app is now installable on your mobile's home screen after visiting its URL in your web browser. 
+
+Your code should now look like [Tutorial Step 10 - Making a PWA](tutorial/step10):
+
+![step8](img/screenshots.png)
+
+## Summary
+
+In this tutorial we have created a shopping list app from nothing but a handful of empty text files. It is a website that stores its data in a in-browser database and can be installed on mobile device and used offline. 
+
+The final version of the code can be found [here](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/). It adds a couple of extra features not included in the tutorial
+
+- shopping lists can be edited and deleted
+- shopping list items can be edited
+- shopping list place names can be looked-up in a database of points-of-interest to get the address and geo-location
+- shopping lists and shopping list items are sorted on load in "newest first" order

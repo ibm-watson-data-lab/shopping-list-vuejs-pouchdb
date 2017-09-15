@@ -1,11 +1,3 @@
-
-## Tools
-
-- http://vuematerial.io/ - Vue + Material Design components
-- https://vuejs.org/ - Vue.js framework
-- https://pouchdb.com/ - PouchDB library
-- https://usecuid.org/ - unique id generation
-
 # Shopping List - with Vue.js and PouchDB
 
 Shopping List is an Offline First demo [Progressive Web App | hybrid mobile app | native mobile app | desktop app] built using [Vue.js](https://vuejs.org/) and [PouchDB](https://pouchdb.com/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list) 
@@ -13,6 +5,8 @@ Shopping List is an Offline First demo [Progressive Web App | hybrid mobile app 
 ## Quick Start
 
 To see this app in action without installing anything, simply visit https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/ in a web browser or mobile device.
+
+![screenshots](img/screenshots.png)
 
 ## Features
 
@@ -48,8 +42,6 @@ Shopping List is a simple demo app, with a limited feature set. Here is a list o
 
 You can try this demo on a mobile phone by visiting https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/. It will open in a web browser. Choose "Add to home screen" and the app will installed on your phone as if it were a downloadable native app. It will appear on your home screen with an icon and the lists and items you create will be stored on your phone.
 
-![screenshots](img/screenshots.png)
-
 ## Tutorial
 
 This [Tutorial](tutorial.md) will show you how to build this app step-by-step.
@@ -63,6 +55,8 @@ This [Tutorial](tutorial.md) will show you how to build this app step-by-step.
 * [Storing the new shopping list](tutorial.md#storing-the-new-shopping-list)
 * [Checking items](tutorial.md#checking-items)
 * [Adding a PouchDB Database](tutorial.md#adding-a-pouchdb-database)
+* [Checkbox events](tutorial.md#checkbox-events)
+* [Making a PWA](tutorial.md#making-a-pwa)
 * Syncing Data
   * Configure a Database
      * Option 1: Apache CouchDB
