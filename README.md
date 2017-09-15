@@ -46,13 +46,13 @@ Shopping List is a simple demo app, with a limited feature set. Here is a list o
 
 ## Live Demo
 
-\<Instructions on using the app as a live demo\>
+You can try this demo on a mobile phone by visiting https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/. It will open in a web browser. Choose "Add to home screen" and the app will installed on your phone as if it were a downloadable native app. It will appear on your home screen with an icon and the lists and items you create will be stored on your phone.
+
+![screenshots](img/screenshots.png)
 
 ## Tutorial
 
-### Table of Contents
-
-[Tutorial](tutorial.md)
+This [Tutorial](tutorial.md) will show you how to build this app step-by-step.
 
 * [Prerequisite Knowledge & Skills](tutorial.md#prerequisite-knowledge--skills)
 * [Key Concepts](tutorial.md#key-concepts)
