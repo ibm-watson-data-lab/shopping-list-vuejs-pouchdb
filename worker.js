@@ -11,12 +11,12 @@ var urlstocache = [
   'https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.find.min.js',
   'https://unpkg.com/vue-material@0.7.4/dist/vue-material.js',
   'https://unpkg.com/vue@2.4.2/dist/vue.js',
-  'http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic',
-  'http://fonts.googleapis.com/icon?family=Material+Icons',
+  'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic',
+  'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://unpkg.com/vue-material@0.7.4/dist/vue-material.css',
-  'http://fonts.gstatic.com/s/roboto/v16/oMMgfZMQthOryQo9n22dcuvvDin1pK8aKteLpeZ5c0A.woff2',
-  'http://fonts.gstatic.com/s/roboto/v16/RxZJdnzeo3R5zSexge8UUZBw1xU1rKptJj_0jans920.woff2',
-  'http://fonts.gstatic.com/s/materialicons/v29/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2'
+  'https://fonts.gstatic.com/s/roboto/v16/oMMgfZMQthOryQo9n22dcuvvDin1pK8aKteLpeZ5c0A.woff2',
+  'https://fonts.gstatic.com/s/roboto/v16/RxZJdnzeo3R5zSexge8UUZBw1xU1rKptJj_0jans920.woff2',
+  'https://fonts.gstatic.com/s/materialicons/v29/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2'
 ];
 
 // install/cache page assets
