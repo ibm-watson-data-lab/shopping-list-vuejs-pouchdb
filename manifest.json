@@ -1,0 +1,16 @@
+{  
+  "short_name": "Shopper",
+  "name": "Shopping List",
+  "start_url": "index.html",
+  "background_color": "#F5F5F5",
+  "theme_color": "#448AFF",
+  "display": "standalone",
+  "orientation": "portrait", 
+  "icons": [
+    {
+      "src": "icon.png",  
+      "sizes": "192x192",  
+      "type": "image/png"  
+    }
+  ]
+}

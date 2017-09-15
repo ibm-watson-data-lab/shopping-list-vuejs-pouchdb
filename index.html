@@ -114,7 +114,7 @@
             <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @keyup.enter.native="onAddListItem"></md-input>
           </md-input-container>
           <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
-            <md-icon class="md-primary">add</md-icon>
+            <md-icon class="md-primary">add_shopping_cart</md-icon>
           </md-button>
         </md-list-item>
         <md-list-item v-for="item in shoppingListItems" :key="item._id" v-if="item.list == currentListId">
@@ -177,6 +177,19 @@
     </main> <!-- main content -->
 
   </div> <!-- app -->
+
+  <!-- service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
 
   <!--  Scripts-->
   
