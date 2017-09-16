@@ -88,7 +88,8 @@ var app = new Vue({
     currentListId: null,
     newItemTitle:'',
     places: [],
-    selectedPlace: null
+    selectedPlace: null,
+    syncURL:''
   },
   computed: {
 
@@ -110,6 +111,12 @@ var app = new Vue({
         }
       }
       return obj;
+    },
+    sortedShoppingLists: function() {
+      return this.shoppingLists.sort(newestFirst);
+    },
+    sortedShoppingListItems: function() {
+      return this.shoppingListItems.sort(newestFirst);
     }
   },
   // called once at app startup
@@ -127,9 +134,6 @@ var app = new Vue({
       return db.find(q);
     }).then((data) => {
 
-      // sort so that newest ones are at the top
-      data.docs.sort(newestFirst);
-
       // write the data to the Vue model, and from there the web page
       app.shoppingLists = data.docs;
 
@@ -141,14 +145,82 @@ var app = new Vue({
       };
       return db.find(q);
     }).then((data) => {
-
-      // sort newest first
-      data.docs.sort(newestFirst);
       app.shoppingListItems = data.docs;
-    });
+
+      // load settings
+      return db.get('_local/user');
+    }).then((data) => {
+      // if we have settings
+      this.syncURL = data.syncURL;
+      this.startSync();
+    }).catch((e) => {})
 
   },
   methods: {
+    onClickSettings: function() {
+      this.mode = 'settings';
+    },
+    onClickStartSync: function() {
+      var obj = {
+        '_id': '_local/user',
+        'syncURL': this.syncURL
+      };
+      db.put(obj).then( () => {
+        this.startSync();
+      });
+    },
+    startSync: function() {
+      if (!this.syncURL) { return; }
+      console.log('starting sync');
+      if (this.sync) {
+        this.sync.cancel();
+      }
+      this.sync = db.sync(this.syncURL, {
+        live: true,
+        retry: true
+      }).on('change', (info) => {
+        // handle change
+        console.log('on change', info);
+        // if this is an incoming change
+        if (info.direction == 'pull' && info.change && info.change.docs) {
+
+          // loop through all the changes
+          for(var i in info.change.docs) {
+            var change = info.change.docs[i];
+            var arr = null;
+
+            // see if it's an incoming item or list or something else
+            if (change._id.match(/^item/)) {
+              arr = this.shoppingListItems;
+            } else if (change._id.match(/^list/)) {
+              arr = this.shoppingLists;
+            } else {
+              continue;
+            }
+
+            // locate the doc in our existing arrays
+            var match = this.findDoc(arr, change._id);
+
+            // if we have it already 
+            if (match.doc) {
+              // and it's a deletion
+              if (change._deleted == true) {
+                // remove it
+                arr.splice(match.i, 1);
+              } else {
+                console.log('found a match', match);
+                // modify it
+                delete change._revisions;
+                Vue.set(arr, match.i, change);
+              }
+            } else {
+              // add it
+              arr.unshift(change);
+            }
+          }
+        }
+      });
+    },
 
     // given a list of docs and an id, find the doc
     // in the list that has an _id that matches the incoming id
@@ -232,7 +304,6 @@ var app = new Vue({
     onBack: function() {
       this.mode='showlist';
       this.pagetitle='Shopping Lists';
-      this.shoppingLists.sort(newestFirst);
     },
 
     // the use wants to edit an individual shopping list

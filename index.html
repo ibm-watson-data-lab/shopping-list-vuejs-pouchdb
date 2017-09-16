@@ -46,6 +46,10 @@
           <md-icon>check</md-icon>
         </md-button>
 
+        <!-- settings -->
+        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickSettings">
+          <md-icon>settings</md-icon>
+        </md-button>
       </md-toolbar>
     </md-whiteframe> <!-- top bar -->
     
@@ -127,7 +131,7 @@
             <md-icon class="md-primary">add_shopping_cart</md-icon>
           </md-button>
         </md-list-item>
-        <md-list-item v-for="item in shoppingListItems" :key="item._id" v-if="item.list == currentListId">
+        <md-list-item v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
           <div>
             <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
           </div>
@@ -146,7 +150,7 @@
 
       <!-- list of shopping lists -->
       <md-list v-if="mode == 'showlist'">
-        <md-card v-for="list in shoppingLists" :key="list._id" :data-id="list._id">     
+        <md-card v-for="list in sortedShoppingLists" :key="list._id" :data-id="list._id">     
           <md-card-header>
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
             <div class="md-subhead">{{ list.place.title }}</div>
@@ -176,6 +180,25 @@
           </md-card-actions>
         </md-card>
       </md-list> <!-- list of shopping list -->
+
+      <!-- settings -->
+      <md-card v-if="mode == 'settings'">
+          <md-card-header>Settings</md-card-header>
+          <md-card-content>
+            You can sync your shopping lists to a remote Apache CouchDB, IBM Cloudant or PouchDB server. Supply the URL, including
+            credentials and database name and hit "Start Sync".
+            <md-input-container>
+              <label>Sync URL</label>
+              <md-input placeholder="e.g http://localhost:5984/list" type="url" v-model="syncURL"></md-input>
+            </md-input-container>  
+            <md-card-actions>
+              <md-button v-on:click="onClickStartSync">
+                  Start Sync
+              </md-button>
+            </md-card-actions> 
+            
+          </md-card-content>
+        </md-card> <!-- settings -->
 
       <!-- floating 'add shopping list' button -->
       <div class="floatingbutton" v-if="mode == 'showlist'">
