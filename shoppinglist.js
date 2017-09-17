@@ -89,7 +89,8 @@ var app = new Vue({
     newItemTitle:'',
     places: [],
     selectedPlace: null,
-    syncURL:''
+    syncURL:'',
+    syncStatus: 'notsyncing'
   },
   computed: {
 
@@ -160,27 +161,35 @@ var app = new Vue({
     onClickSettings: function() {
       this.mode = 'settings';
     },
+    saveLocalDoc: function(doc) {
+      return db.get(doc._id).then((data) => {
+        doc._rev = data._rev;
+        return db.put(doc);
+      }).catch((e) => {
+        return db.put(doc);
+      });
+    },
     onClickStartSync: function() {
       var obj = {
         '_id': '_local/user',
         'syncURL': this.syncURL
       };
-      db.put(obj).then( () => {
+      this.saveLocalDoc(obj).then( () => {
         this.startSync();
       });
     },
     startSync: function() {
-      if (!this.syncURL) { return; }
-      console.log('starting sync');
+      this.syncStatus = 'notsyncing';
       if (this.sync) {
         this.sync.cancel();
       }
+      if (!this.syncURL) { return; }
+      this.syncStatus = 'syncing';
       this.sync = db.sync(this.syncURL, {
         live: true,
-        retry: true
+        retry: false
       }).on('change', (info) => {
         // handle change
-        console.log('on change', info);
         // if this is an incoming change
         if (info.direction == 'pull' && info.change && info.change.docs) {
 
@@ -219,7 +228,15 @@ var app = new Vue({
             }
           }
         }
-      });
+      }).on('error', (e) => {
+        this.syncStatus = 'syncerror';
+      }).on('denied', (e) => {
+        this.syncStatus = 'syncerror';
+      }).on('paused', (e) => {
+        if (e) {
+          this.syncStatus = 'syncerror';
+        }
+      });;
     },
 
     // given a list of docs and an id, find the doc
