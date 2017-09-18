@@ -32,9 +32,9 @@ const sampleListItem = {
 };
 
 // sort comparison function to sort an objected by "updateAt" field
-const  newestFirst = (a, b) => {
-  if (a.updatedAt > b.updatedAt) return -1;
-  if (a.updatedAt < b.updatedAt) return 1;
+const newestFirst = (a, b) => {
+  if (a.createdAt > b.createdAt) return -1;
+  if (a.createdAt < b.createdAt) return 1;
   return 0 
 };
 
