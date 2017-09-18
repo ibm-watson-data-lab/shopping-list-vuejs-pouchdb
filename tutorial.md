@@ -872,13 +872,30 @@ Your code should now look like [Tutorial Step 10 - Making a PWA](tutorial/step10
 
 ![step8](img/screenshots.png)
 
+## Syncing with a remote database
+
+Now you have your PWA working it is very simple to sync your in-browser database to a remote database for backup or data-sharing purposes. In fact, it's a single function call:
+
+```js
+  db.sync(url, { live: true});
+```
+
+where `url` is the URL of a remote CouchDB, Cloudant or PouchDB database e.g.
+
+```js
+  'https://user:pass@host.cloudant.com/shopping`
+```
+
+The [complete version](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/) of this implements syncing via a "settings" panel, where the remote database URL is entered. 
+ 
 ## Summary
 
 In this tutorial we have created a shopping list app from nothing but a handful of empty text files. It is a website that stores its data in a in-browser database and can be installed on mobile device and used offline. 
 
-The final version of the code can be found [here](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/). It adds a couple of extra features not included in the tutorial
+The final version of the code can be found [here](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/). It adds a handful of extra features not included in the tutorial:
 
 - shopping lists can be edited and deleted
 - shopping list items can be edited
 - shopping list place names can be looked-up in a database of points-of-interest to get the address and geo-location
 - shopping lists and shopping list items are sorted on load in "newest first" order
+- settings page to allow syncing with a remote database
