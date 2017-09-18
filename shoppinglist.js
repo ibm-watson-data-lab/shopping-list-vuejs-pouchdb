@@ -182,6 +182,7 @@ var app = new Vue({
       this.syncStatus = 'notsyncing';
       if (this.sync) {
         this.sync.cancel();
+        this.sync = null;
       }
       if (!this.syncURL) { return; }
       this.syncStatus = 'syncing';
@@ -224,7 +225,9 @@ var app = new Vue({
               }
             } else {
               // add it
-              arr.unshift(change);
+              if (!change._deleted) {
+                arr.unshift(change);
+              }
             }
           }
         }
