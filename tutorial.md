@@ -883,7 +883,7 @@ Now you have your PWA working it is very simple to sync your in-browser database
 where `url` is the URL of a remote CouchDB, Cloudant or PouchDB database e.g.
 
 ```js
-  'https://user:pass@host.cloudant.com/shopping`
+  var url = 'https://user:pass@host.cloudant.com/shopping';
 ```
 
 The [complete version](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/) of this implements syncing via a "settings" panel, where the remote database URL is entered. 
