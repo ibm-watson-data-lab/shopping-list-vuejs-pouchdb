@@ -95,7 +95,11 @@ We also need some extra JavaScript objects at the bottom of our index.html file,
    <script src="https://unpkg.com/vue-material@0.7.4/dist/vue-material.js"></script>
 ```
 
-This is the Vue.js core code and the Vue Material plugin.
+They are
+
+- the `cuid` library that generates unique identifiers. We use this to create `_id` field for the documents we create
+- the Vue.js JavaScript library itself
+- the Vue-Material JavaScript that makes it easy to add Material Design UI to our app
 
 We can then replace our hard-coded 'h1' tag with a 'div' tag that will become our Vue.js app:
 
@@ -205,7 +209,7 @@ var app = new Vue({
 });
 ```
 
-It's that simple. Next, in index.html, we want to render the `shoppingLists` array. This is acheived by with two components:
+It's that simple. Next, in index.html, we want to render the `shoppingLists` array. This is achieved with two components:
 
 - the [md-list tag](http://vuematerial.io/#/components/list) from the Vue Material library to render a Material Design list item
 - the [v-for directive](https://vuejs.org/v2/guide/list.html) from the Vue.js library to iterate over each item in the `shoppingLists` array
@@ -226,7 +230,7 @@ Place this code below your top bar in the index.html file:
       </md-list> <!-- list of shopping lists -->
 ```
 
-You still won't see any data on your web page because the `shoppingList` array is empty. Let's simulate the addition of a new shopping list be running a command on the browser's Developer Tools console:
+You still won't see any data on your web page because the `shoppingList` array is empty. Let's simulate the addition of a new shopping list be running a command on the browser's Developer Tools console (you can access your JavaScript console in Chrome by choosing View --> Developers --> JavaScript Console from your Chrome menu. In Firefox it's Tools --> Web Developer --> Web Console):
 
 ```js
 var obj = {_id:'list:1',type:'list',version:1,title:'Food',checked:false,place:{title:'Whole Foods'},createdAt: '', updatedAt:''}
@@ -580,6 +584,8 @@ and we're going to add a CSS class called "cardchecked" to every item that has b
             <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
 ```
 
+Hint: look for the `<md-list-item v-for="item in shoppingListItems"...>` tag.
+
 Finally, adding some extra CSS:
 
 ```css
@@ -655,7 +661,7 @@ This function iterates over the app's `shoppingListItems` array building up an o
 }
 ```
 
-We can then use `counts` in our `md-card` the displays each shopping list:
+We can then use `counts` in our `md-card` that displays each shopping list:
 
 ```html
           <md-card-content v-if="counts[list._id]">
@@ -669,7 +675,7 @@ Your code should now look like [Tutorial Step 7 - Adding list counts](tutorial/s
 
 ![step7](img/step7.png)
 
-Now we need to add a database to permenantly store the data between sessions. This is where PouchDB comes in.
+Now we need to add a database to store the data between sessions. This is where PouchDB comes in.
 
 ## Adding a PouchDB database
 
