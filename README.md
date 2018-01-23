@@ -8,6 +8,23 @@ To see this app in action without installing anything, simply visit https://ibm-
 
 ![screenshots](img/screenshots.png)
 
+## Running locally
+
+Clone the repository from a terminal:
+
+    git clone https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb
+    
+Install the dependencies
+
+    cd shopping-list-vuejs-pouchdb
+    npm install
+
+and run:
+
+    npm run start
+
+Vist the URL that the app outputs in your web browser.
+
 ## Features
 
 Shopping List is a simple demo app, with a limited feature set. Here is a list of features written as user stories grouped by Epic:
