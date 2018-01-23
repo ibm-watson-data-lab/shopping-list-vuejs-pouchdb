@@ -1,0 +1,29 @@
+{
+  "name": "shopping-list-vuejs-pouchdb",
+  "version": "1.0.0",
+  "description": "Offline first shopping list app built with Vue.js and PouchDB",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo 'ok'",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb.git"
+  },
+  "keywords": [
+    "Offline",
+    "First",
+    "PouchDB",
+    "Vue.js"
+  ],
+  "author": "Glynn Bird <glynn.bird@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb/issues"
+  },
+  "homepage": "https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
