@@ -209,7 +209,6 @@ To disable tracking, simply remove ``require('metrics-tracker-client').track();`
 
 # Links
 * [More Shopping List Sample Apps](https://github.com/ibm-watson-data-lab/shopping-list)
-<!--Keep the link to the main repo (above) in your list. Update the remainder of the list based on what's relevant for your specific project.-->
 * [Offline First](http://offlinefirst.org/)
 * [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)
 * [Service Workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)
@@ -217,7 +216,7 @@ To disable tracking, simply remove ``require('metrics-tracker-client').track();`
 * [PouchDB](https://pouchdb.com/)
 * [Apache CouchDB](https://couchdb.apache.org/)
 * [IBM Cloudant](https://www.ibm.com/cloud/cloudant)
-* [Materialize CSS](http://materializecss.com/getting-started.html)
+* [Vue Material](https://vuematerial.io/)
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 <!-- If any of the resources below are relevant, update the list and uncomment this section.
