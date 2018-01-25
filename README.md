@@ -3,7 +3,7 @@
 
 # Create an Offline First Shopping List with Vue.js and PouchDB
 
-This code pattern is a reference implementation of an Offline First shopping list app, built as a Progressive Web App using [Vue.js](https://vuejs.org/) and [PouchDB](https://pouchdb.com/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list).
+This code pattern is a reference implementation of an Offline First shopping list app, built as a Progressive Web App using [Vue.js](https://vuejs.org/) and [PouchDB](https://pouchdb.com/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list)
 
 When the reader has completed this Code Pattern and explored the code in this GitHub repository, they will understand how to:
 
@@ -71,7 +71,7 @@ Want to check out the end product on your own machine? Follow these steps to dep
 
 This app can be deployed to IBM Cloud. You can also run this app on your local machine for development purposes using either a local Apache CouchDB instance or an IBM Cloudant service instance from the IBM Cloud Catalog.
 
-* [Deploy to IBM Cloud](#deploy-to-bluemix) **OR** [Run locally](#run-locally)
+* [Deploy to IBM Cloud](#deploy-to-ibm-cloud) **OR** [Run locally](#run-locally)
 * [Database and replication setup](#database-and-replication-setup)
 
 ## Deploy to IBM Cloud
