@@ -1,0 +1,11 @@
+id: https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb
+event_id: web
+event_organizer: wdp-devadv
+
+runtimes:
+       - Cloud Foundry
+
+services:
+       - Cloudant NoSQL DB
+
+language: nodejs

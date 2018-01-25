@@ -25,3 +25,6 @@ app.use('/', express.static(__dirname))
 app.listen(port, () => {
   console.log(`Server starting on ${port}`)
 })
+
+require('metrics-tracker-client').track()
+
