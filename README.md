@@ -177,14 +177,14 @@ Add `/shopping-list` to the URL to connect to the database that you created.
 <!--Edit as appropriate, update screenshot-->
 # Using the app
 
-The app allows you to create a shopping list by clicking on the plus sign. Click on the list to see its items. Then, you can add items to the list by clicking the plus sign. There is a checkbox to allow you to mark the items complete as you buy load up your cart.
+The app allows you to create a shopping list by clicking on the plus sign. Click on the twistie to display list items, add new items, remove items or scratch them off .
 
 When you have not configured your Replication Target or when you are offline, the lists will not sync. One good way to test this is to run two browsers. You can use Chrome and Firefox and have different lists in each.
 
 When you go online and have the database and CORS enabled and the Replication Target is set, the shopping lists will sync. You will then be able to use both lists from either browser.
 
 <!-- add/replace screen capture(s) -->
-![](doc/source/images/shopping_lists.png)
+![app shopping lists](doc/source/images/app_shopping_lists.png)
 
 ## Running the tests
 
