@@ -71,9 +71,8 @@ To see this app in action without installing anything, simply visit https://ibm-
 
 1. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking `View app`.
 
-1. To see the app and services created and configured for this code pattern, use the IBM Cloud dashboard. The app is named [app-name] with a unique suffix. The following services are created and easily identified by the [chosen prefix] prefix:
-    * prefix-Service1
-    * prefix-Service2
+1. To see the app and services created and configured for this code pattern, use the IBM Cloud dashboard. The app is named `shopping-list-react-pouchdb` with a unique suffix. The following services are created and easily identified by the `sljsp` prefix:
+   * sljsp-CloudantNoSQLDB
 
 ## Run locally
 
