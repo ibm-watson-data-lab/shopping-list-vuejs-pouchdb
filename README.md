@@ -91,12 +91,11 @@ Clone the `shopping-list-vuejs-pouchdb` locally. In a terminal, run:
 
 ```
 $ git clone https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb
+$ cd shopping-list-vuejs-pouchdb
 ```
-
 ### 2. Install the prerequisites
 
 First, install the pre-requisites (we assume you have pre-installed [Node.js](https://nodejs.org/)):
-
 
     $ npm install 
 
