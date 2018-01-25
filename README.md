@@ -140,22 +140,21 @@ Tip: Select the **Manage** tab and click **Launch** to open the Cloudant dashboa
 * Use the Cloudant or CouchDB dashboard to create a database.
 
 * Select the Databases tab on the left and then use the `Create Database` button to create the "shopping-list" database.
-The Shopping List app can be used locally before the database exists, but cannot sync
-until the remote database is completed.
+The Shopping List app can be used locally before the database exists, but cannot sync until the remote database is completed.
 
 <!-- replace the screen shot if required -->
-![](doc/source/images/create_db.png)
+![Create the shopping-list database](doc/source/images/create_db.png)
 
 ### 2. Enable CORS
 
-* Open the Cloudant or CouchDB dashboard to enable Cross-Origin Resource Sharing (CORS).  
+* Open the Cloudant or CouchDB dashboard to enable Cross-Origin Resource Sharing (CORS).
 
 * Select the Account Settings (or config) tab and open the **CORS** tab.
 
 * Enable CORS and restrict the domain as needed for security.
 
 <!-- replace the screen shot (this should be required because the application URL is displayed) -->
-![](doc/source/images/enable_cors.png)
+![Enable CORS](doc/source/images/enable_cors.png)
 
 ### 3. Set the replication target
 
@@ -165,7 +164,7 @@ If you use the IBM Cloud Cloudant URL taken from the service credentials as desc
 Add `/shopping-list` to the URL to connect to the database that you created.
 
 <!-- replace the screen shot (this should be required) -->
-![](doc/source/images/replicator.png)
+![Configure replication target](doc/source/images/replicator.png)
 
 <!--Edit as appropriate, update screenshot-->
 # Using the app
