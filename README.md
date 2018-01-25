@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/ibm-watson-data-lab/shopping-list-vuejs-pouchdb.svg?branch=master)](https://travis-ci.org/ibm-watson-data-lab/shopping-list-vuejs-pouchdb)
-![IBM Cloud Deployments](https://metrics-tracker.mybluemix.net/stats/86148b6727eeca25f5dab7bc69a4678b/badge.svg)
+![IBM Cloud Deployments](https://metrics-tracker.mybluemix.net/stats/4b4ca7dd406587d30b91b8ecff5eaf6b/badge.svg)
 
 # Create an Offline First Shopping List with Vue.js
 
@@ -65,7 +65,7 @@ To see this app in action without installing anything, simply visit https://ibm-
 
 ## Deploy to IBM Cloud
 <!--Update the repo and tracking id-->
-[![Deploy to IBM Cloud](https://metrics-tracker.mybluemix.net/stats/5c5df69e10058d49cdc1f4d2fc63ce31/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-data-lab/shopping-list-polymer-pouchdb)
+[![Deploy to IBM Cloud](https://metrics-tracker.mybluemix.net/stats/4b4ca7dd406587d30b91b8ecff5eaf6b/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
