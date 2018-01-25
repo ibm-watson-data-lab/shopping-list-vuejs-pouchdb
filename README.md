@@ -1,9 +1,11 @@
 [![Build Status](https://travis-ci.org/ibm-watson-data-lab/shopping-list-vuejs-pouchdb.svg?branch=master)](https://travis-ci.org/ibm-watson-data-lab/shopping-list-vuejs-pouchdb)
 ![IBM Cloud Deployments](https://metrics-tracker.mybluemix.net/stats/4b4ca7dd406587d30b91b8ecff5eaf6b/badge.svg)
 
-# Create an Offline First Shopping List with Vue.js
+# Create an Offline First Shopping List with Vue.js and PouchDB
 
-In this code pattern, we will create an Offline First shopping list. Shopping List is an Offline First demo Progressive Web App built using [Vue.js](https://vuejs.org/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list).
+This code pattern is a reference implementation of an Offline First shopping list app, built as a Progressive Web App using [Vue.js](https://vuejs.org/) and [PouchDB](https://pouchdb.com/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list).
+
+When the reader has completed this Code Pattern and explored the code in this GitHub repository, they will understand how to:
 
 - create a shopping list web application that stores its data in a local PouchDB database.
 - turn the web application into a Progressive Web App that works with or without an internet connection.
@@ -35,18 +37,22 @@ This shopping list app is a small single page web application consisting of an H
 
 So what sets this app apart? Its Offline First architecture. The Offline First approach plans for the most constrained network environment first, enabling a great user experience even while the device is offline or has only an intermittent connection, and providing progressive enhancement as network conditions improve. This design also makes the app incredibly performant (fast!) on the best of networks. 
 
+<!--Adjust this paragraph if your implementation is NOT a PWA. -->
 PouchDB, CouchDB, and Service Worker are the primary tools that turn our simple shopping list app into a high performance, offline-capable Progressive Web App.
 
-**Data stays safe on your device, even while it's offline.**  
+<!--Adjust this paragraph if your implementation does NOT use PouchDB. -->
+**Data stays safe on your device, even while it's offline.**
 Persistance of shopping lists and item data entered by the user is achieved using the in-browser database PouchDB. This will allow your data to survive between sessions and when disconnected from the network. (Whether you remember that you need juice while you're on your trusty home Wi-Fi or in the middle of the wilderness, you can still add it your list.)
 
-**Data syncs between devices when a connection is available.**  
+**Data syncs between devices when a connection is available.**
 When a connection is available, the data is synced from the local device to a CouchDB database in the cloud, and can thus be shared across multiple devices or users. (Need to share your grocery list with your roommate or access it on both your phone and your laptop? No problem!)
 
-**The app loads quickly, even while offline.**  
+<!--Adjust this paragraph if your implementation does NOT use Service Worker. -->
+**The app loads quickly, even while offline.**
 To keep the app itself functional while offline, a Service Worker is used to cache page resources (the most important HTML, CSS, and JavaScript files) when the web application is first visited. Each device must have a connection for this first visit, after which the app will be fully functional even while offline or in shoddy network conditions. (No more error messages or frustratingly slow page loads.)
 
-**The app can be installed on a mobile device.**  
+<!--Adjust this paragraph if your implementation is NOT a PWA. -->
+**The app can be installed on a mobile device.**
 In combination with the Service Worker used for caching, a manifest file containing metadata allows the app to become a Progressive Web App, an enhanced website that can be installed on a mobile device and can then be used with or without an internet connection. (It's secretly still a website, but you can access it through one of those handy dandy little app icons on your homescreen!)
 
 Explore the code in this GitHub repository to see how the Offline First design is applied.
@@ -60,6 +66,11 @@ Refer to the [tutorial](https://github.com/ibm-watson-data-lab/shopping-list-vue
 To see this app in action without installing anything, simply visit https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/ in a web browser or on your mobile device.
 
 # Steps
+
+Want to check out the end product on your own machine? Follow these steps to deploy your own instance of the shopping list app.
+
+This app can be deployed to IBM Cloud. You can also run this app on your local machine for development purposes using either a local Apache CouchDB instance or an IBM Cloudant service instance from the IBM Cloud Catalog.
+
 * [Deploy to IBM Cloud](#deploy-to-bluemix) **OR** [Run locally](#run-locally)
 * [Database and replication setup](#database-and-replication-setup)
 
@@ -213,7 +224,8 @@ To disable tracking, simply remove ``require('metrics-tracker-client').track();`
 * [Materialize CSS](http://materializecss.com/getting-started.html)
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-<!-- pick the relevant ones from below -->
+<!-- If any of the resources below are relevant, update the list and uncomment this section.
+
 # Learn more
 
 * **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/code/technologies/artificial-intelligence/).
@@ -224,7 +236,8 @@ To disable tracking, simply remove ``require('metrics-tracker-client').track();`
 * **PowerAI**: Get started or get scaling, faster, with a software distribution for machine learning running on the Enterprise Platform for AI: [IBM Power Systems](https://www.ibm.com/ms-en/marketplace/deep-learning-platform)
 * **Spark on IBM Cloud**: Need a Spark cluster? Create up to 30 Spark executors on IBM Cloud with our [Spark service](https://console.bluemix.net/catalog/services/apache-spark)
 * **Kubernetes on IBM Cloud**: Deliver your apps with the combined the power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
-
+* 
+-->
 <!--keep this-->
 
 # License
