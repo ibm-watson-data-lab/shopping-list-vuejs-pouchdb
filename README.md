@@ -31,7 +31,7 @@ In this code pattern, we will create an Offline First shopping list. Shopping Li
 
 ## Key concepts
 
-This shopping list app is a small single page web application consisting of an HTML file, a couple of CSS files, and a couple of JavaScript files, and the PouchDB library. No other JavaScript framework framework (such as jQuery or Ember.js) or library other than PouchDB is used. The web page will allow multiple shopping lists to be created (e.g., Groceries, Clothes, etc.) each with a number of shopping list items associated with them (e.g., Bread, Water, etc.).
+This shopping list app is a small single page web application consisting of an HTML file, a couple of CSS files, and a single JavaScript file, the Vue.js framework and the PouchDB library. The web page will allow multiple shopping lists to be created (e.g., Groceries, Clothes, etc.) each with a number of shopping list items associated with them (e.g., Bread, Water, etc.).
 
 So what sets this app apart? Its Offline First architecture. The Offline First approach plans for the most constrained network environment first, enabling a great user experience even while the device is offline or has only an intermittent connection, and providing progressive enhancement as network conditions improve. This design also makes the app incredibly performant (fast!) on the best of networks. 
 
