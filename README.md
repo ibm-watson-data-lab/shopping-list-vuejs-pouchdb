@@ -3,7 +3,7 @@
 
 # Create an Offline First Shopping List with Vue.js and PouchDB
 
-This code pattern is a reference implementation of an Offline First shopping list app, built as a Progressive Web App using [Vue.js](https://vuejs.org/) and [PouchDB](https://pouchdb.com/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list)
+This code pattern is a reference implementation of an Offline First shopping list app, built as a [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) using [Vue.js](https://vuejs.org/) and [PouchDB](https://pouchdb.com/). [This app is part of a series of Offline First demo apps, each built using a different stack.](https://github.com/ibm-watson-data-lab/shopping-list)
 
 When the reader has completed this Code Pattern and explored the code in this GitHub repository, they will understand how to:
 
@@ -15,10 +15,10 @@ When the reader has completed this Code Pattern and explored the code in this Gi
 
 ## Flow
 
-1. Browser loads Progressive Web App's resources from the web server 
-2. User interacts with the web app to add shopping lists and list items 
-3. Data is stored locally in PouchDB
-4. PouchDB syncs its data with a remote IBM Cloudant database
+1. Browser loads Progressive Web App's resources from the web server. 
+2. User interacts with the web app to add shopping lists and list items. 
+3. Data is stored locally in PouchDB.
+4. PouchDB syncs its data with a remote IBM Cloudant database.
 
 
 ## Included components
@@ -33,27 +33,23 @@ When the reader has completed this Code Pattern and explored the code in this Gi
 
 ## Key concepts
 
-This shopping list app is a small single page web application consisting of an HTML file, a couple of CSS files, and a single JavaScript file, the Vue.js framework and the PouchDB library. The web page will allow multiple shopping lists to be created (e.g., Groceries, Clothes, etc.) each with a number of shopping list items associated with them (e.g., Bread, Water, etc.).
+This shopping list app is a small single page web application consisting of an HTML file, a couple of CSS files, and a single JavaScript file, the Vue.js framework, and the PouchDB library. The web page will allow multiple shopping lists to be created (e.g., Groceries, Clothes, etc.) each with a number of shopping list items associated with them (e.g., Bread, Water, etc.).
 
 So what sets this app apart? Its Offline First architecture. The Offline First approach plans for the most constrained network environment first, enabling a great user experience even while the device is offline or has only an intermittent connection, and providing progressive enhancement as network conditions improve. This design also makes the app incredibly performant (fast!) on the best of networks. 
 
-<!--Adjust this paragraph if your implementation is NOT a PWA. -->
 PouchDB, CouchDB, and Service Worker are the primary tools that turn our simple shopping list app into a high performance, offline-capable Progressive Web App.
 
-<!--Adjust this paragraph if your implementation does NOT use PouchDB. -->
 **Data stays safe on your device, even while it's offline.**
-Persistance of shopping lists and item data entered by the user is achieved using the in-browser database PouchDB. This will allow your data to survive between sessions and when disconnected from the network. (Whether you remember that you need juice while you're on your trusty home Wi-Fi or in the middle of the wilderness, you can still add it your list.)
+Persistence of shopping lists and item data entered by the user is achieved using the in-browser database PouchDB. This will allow your data to survive between sessions and when disconnected from the network. (Whether you remember that you need juice while you're on your trusty home Wi-Fi or in the middle of the wilderness, you can still add it your list.)
 
 **Data syncs between devices when a connection is available.**
 When a connection is available, the data is synced from the local device to a CouchDB database in the cloud, and can thus be shared across multiple devices or users. (Need to share your grocery list with your roommate or access it on both your phone and your laptop? No problem!)
 
-<!--Adjust this paragraph if your implementation does NOT use Service Worker. -->
 **The app loads quickly, even while offline.**
-To keep the app itself functional while offline, a Service Worker is used to cache page resources (the most important HTML, CSS, and JavaScript files) when the web application is first visited. Each device must have a connection for this first visit, after which the app will be fully functional even while offline or in shoddy network conditions. (No more error messages or frustratingly slow page loads.)
+To keep the app itself functional while offline, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) is used to cache page resources (the most important HTML, CSS, and JavaScript files) when the web application is first visited. Each device must have a connection for this first visit, after which the app will be fully functional even while offline or in shoddy network conditions. (No more error messages or frustratingly slow page loads.)
 
-<!--Adjust this paragraph if your implementation is NOT a PWA. -->
 **The app can be installed on a mobile device.**
-In combination with the Service Worker used for caching, a manifest file containing metadata allows the app to become a Progressive Web App, an enhanced website that can be installed on a mobile device and can then be used with or without an internet connection. (It's secretly still a website, but you can access it through one of those handy dandy little app icons on your homescreen!)
+In combination with the Service Worker used for caching, a [manifest file]((https://w3c.github.io/manifest/)) containing metadata allows the app to become a Progressive Web App, an enhanced website that can be installed on a mobile device and can then be used with or without an internet connection. (It's secretly still a website, but you can access it through one of those handy dandy little app icons on your homescreen!)
 
 Explore the code in this GitHub repository to see how the Offline First design is applied.
 
@@ -63,7 +59,7 @@ Refer to the [tutorial](https://github.com/ibm-watson-data-lab/shopping-list-vue
 
 # Live demo 
 
-To see this app in action without installing anything, simply visit https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/ in a web browser or on your mobile device.
+To see this app in action without installing anything, simply visit [https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/) in a web browser or on your mobile device.
 
 # Steps
 
@@ -75,7 +71,6 @@ This app can be deployed to IBM Cloud. You can also run this app on your local m
 * [Database and replication setup](#database-and-replication-setup)
 
 ## Deploy to IBM Cloud
-<!--Update the repo and tracking id-->
 [![Deploy to IBM Cloud](https://metrics-tracker.mybluemix.net/stats/4b4ca7dd406587d30b91b8ecff5eaf6b/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
@@ -89,7 +84,6 @@ This app can be deployed to IBM Cloud. You can also run this app on your local m
 
 > NOTE: These steps are only needed when running locally instead of using the ``Deploy to IBM Cloud`` button.
 
-<!-- there are MANY updates necessary here, just screenshots where appropriate -->
 
 1. [Clone the repo](#1-clone-the-repo)
 1. [Install the prerequisites](#2-install-the-prerequisites)
@@ -171,15 +165,12 @@ If you use the IBM Cloud Cloudant URL taken from the service credentials as desc
 
 Add `/shopping-list` to the URL to connect to the database that you created.
 
-<!-- replace the screen shot (this should be required) -->
   ![Configure replication target](doc/source/images/replicator.png)
 
-<!--Edit as appropriate, update screenshot-->
 # Using the app
 
 The app allows you to create a shopping list by clicking on the plus sign. Click on the twistie to display list items, add new items, remove items or scratch them off.
 
-<!-- add/replace screen capture(s) -->
 ![app shopping lists](doc/source/images/app_shopping_lists.png)
 
 When you have not configured your Replication Target or when you are offline, the lists will not sync. One good way to test this is to run two browsers. You can use Chrome and Firefox and have different lists in each.
@@ -188,14 +179,13 @@ When you go online and have the database and CORS enabled and the Replication Ta
 
 ## Running the tests
 
-<!-- replace with test information, if there are tests defined -->
-This repository uses the [karma test runner](http://karma-runner.github.io/2.0/index.html). Our continuous integration will run the tests when you push to GitHub. To test your code on your machine, simply run `npm test`.
+This repository uses the [Karma test runner](http://karma-runner.github.io/2.0/index.html). Our continuous integration will run the tests when you push to GitHub. To test your code on your machine, simply run `npm test`.
 
 This project does not, at present, have any automated tests. Tests can be added to the `test` directory. If you'd like to contribute some then please raise an issue and submit a pull-request - we'd be very happy to add them!
 
 ## Deploying to GitHub Pages
 
-This shopping list app can be deployed to and accessed from GitHub Pages. This app is available to try at https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/ without downloading or installing anything because this repository is itself deployed to GitHub Pages.
+This shopping list app can be deployed to and accessed from GitHub Pages. This app is available to try at [https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/) without downloading or installing anything because this repository is itself deployed to GitHub Pages.
 
 To make your own custom deployment, you only need the following files:
 
@@ -207,19 +197,14 @@ To make your own custom deployment, you only need the following files:
 
 Create a new GitHub repository containing only the above five files and follow the instructions [here](https://pages.github.com/) on how to publish the files to a GitHub Pages URL.
 
-<!-- remove this section (and the dependent sub-sections) if the repo is not enabled for metrics cllection --> 
 # Privacy Notice
-<!-- No change required. Only link to the "master" privacy notice; this avoids duplication of content and -->
-<!-- conflictingf information should the underlying metrics infrastructure change -->
 
-Refer to https://github.com/IBM/metrics-collector-service#privacy-notice.
+Refer to [https://github.com/IBM/metrics-collector-service#privacy-notice](https://github.com/IBM/metrics-collector-service#privacy-notice).
 
 ## Disabling Deployment Tracking
 
-<!-- Update the instructions as required -->
-To disable tracking, simply remove ``require('metrics-tracker-client').track();`` from the ``app.js`` file in the top level directory.
+To disable tracking, simply remove ``require('metrics-tracker-client').track()`` from the ``app.js`` file in the top level directory.
 
-<!--Include any relevant links-->
 
 # Links
 * [More Shopping List Sample Apps](https://github.com/ibm-watson-data-lab/shopping-list)
@@ -234,7 +219,6 @@ To disable tracking, simply remove ``require('metrics-tracker-client').track();`
 * [Vue Material](https://vuematerial.io/)
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-<!--keep this-->
 
 # License
 [Apache 2.0](LICENSE)
