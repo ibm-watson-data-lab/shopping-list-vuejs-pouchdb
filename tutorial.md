@@ -8,7 +8,7 @@ You will need to know how a web page is built, including HTML and CSS. A working
 
 This tutorial will guide you through the process of creating the app on your machine, so it is recommended you have a code editor (I use [Visual Studio Code](https://code.visualstudio.com/)) and a web server - I use Python's built-in server (see Inital Set Up).
 
-You'll also need a modern web browser, such as Google Chrome. It helps to use the browser's Developer Tools so that you can debug your app as you develop it.
+You'll also need a modern web browser, such as Google Chrome. It helps to use the browser's Developer Tools so that you can debug your app as you develop it. The tutorial is broken down into steps.  At the end of each step we've provided both a screenshot and an example of how all your files should look at this point, so you can always check against those or jump to a particular step if you need to.
 
 ##  Key Concepts
 
@@ -16,7 +16,7 @@ The shopping list app is a very simple web app consisting of a single HTML file,
 
 The web page will be controlled by [Vue.js](https://vuejs.org/) which will be responsible for transferring user input to the JavaScript app and for rendering the app's data in HTML. 
 
-Later we will add *persistance* to the app by storing the shopping lists and items in an in-browser database [PouchDB](https://pouchdb.com/). This will allow your data to survive between sessions and allow the data to be synced to the cloud for safekeeping.
+Later we will add *persistence* to the app by storing the shopping lists and items in an in-browser database [PouchDB](https://pouchdb.com/). This will allow your data to survive between sessions and allow the data to be synced to the cloud for safekeeping.  It will also allow the data to be used on multiple devices, even if they aren't consistently connected.
 
 At the end of the tutorial we will have created a [Progressive Web App](https://developers.google.com/web/progressive-web-apps/), an enhanced website that can be "installed" on a mobile phone which can be used with or without an internet connection.
 
@@ -24,9 +24,9 @@ At the end of the tutorial we will have created a [Progressive Web App](https://
 
 First we need a new empty folder on your computer and three files that define our app:
 
-- index.html - the HTML markup of our website
-- shoppinglist.js - the "app" itself, storing the shopping list state and defining your application's logic
-- shoppinglist.css - some CSS styling to customise our app's look
+- `index.html` - the HTML markup of our website
+- `shoppinglist.js` - the "app" itself, storing the shopping list state and defining your application's logic
+- `shoppinglist.css` - some CSS styling to customise our app's look
 
 Create the three blank files in a new directory and we can start to build the application scaffolding.
 
@@ -69,7 +69,7 @@ Your code should now look like [Tutorial Step 1 - Initial Set Up](tutorial/step1
 
 Next we need to add the Vue.js to our project. Vue.js is a JavaScript library that controls the follow of data from your JavaScript application to the HTML page, and vice versa. 
 
-First we'll need to include some extra styling information in the 'head' section of your index.html, before the line that includes your CSS file:
+First we'll need to include some extra styling information in the 'head' section of your `index.html`, before the line that includes your CSS file:
 
 ```html
   <!-- Material Design icons and fonts  -->
@@ -82,7 +82,7 @@ First we'll need to include some extra styling information in the 'head' section
 
 These are the fonts and styles required to turn a plain HTML app into one that adheres to the [Material Design Guidelines](https://material.io/guidelines/) - the design framework Google uses in its products. We are using a library called [Vue Material](http://vuematerial.io/) which contains a number of HTML components that are Vue.js compatible and conform to Material Design for very little effort on our part.
 
-We also need some extra JavaScript objects at the bottom of our index.html file, just above the line that includes our shoppinglist.js file:
+We also need some extra JavaScript objects at the bottom of our `index.html` file, just above the line that includes our `shoppinglist.js` file:
 
 ```html
  <!-- cuid - unique id generator -->
@@ -209,7 +209,7 @@ var app = new Vue({
 });
 ```
 
-It's that simple. Next, in index.html, we want to render the `shoppingLists` array. This is achieved with two components:
+It's that simple. Next, in index.html, we want to render the `shoppingLists` array. This is achieved by doing the following:
 
 - the [md-list tag](http://vuematerial.io/#/components/list) from the Vue Material library to render a Material Design list item
 - the [v-for directive](https://vuejs.org/v2/guide/list.html) from the Vue.js library to iterate over each item in the `shoppingLists` array
@@ -248,9 +248,15 @@ body {
   background-color: white !important;
   margin:20px
 }
+
+.main-toolbar{
+  position:sticky;
+  top:0px;
+  z-index:1000;
+}
 ```
 
-Your code should now look like [Tutorial Step 3 - IAdding data](tutorial/step3) and in a web browser should show any lists you manually push into the app's `shoppingList` array:
+Your code should now look like [Tutorial Step 3 - Adding data](tutorial/step3) and in a web browser should show any lists you manually push into the app's `shoppingList` array:
 
 ![step3](img/step3.png)
 
@@ -296,7 +302,7 @@ We can then add a floating button to our `index.html` which is clicked when the 
       </div> <!-- floating 'add shopping list' button -->
 ```
 
-The above button expects a `onClickAddShoppingList` function to exist on your app, so let's add that as a 'method' to our Vue.js app:
+The above button expects a `onClickAddShoppingList()` function to exist on your app, so let's add that as a 'method' to our Vue.js app:
 
 ```js
 var app = new Vue({
@@ -329,7 +335,7 @@ and some new CSS:
 }
 ```
 
-We can test that now. Your app should have a blue '+' button in the bottom right, which when clicked enters 'addlist' mode. But we have no means of getting back! Let's fix that by adding a back button as the first thing in our 'md-toolbar' markup in `index.html`:
+We can test that now. Your app should have a blue "+" button in the bottom right, which when clicked enters 'addlist' mode. But we have no means of getting back! Let's fix that by adding a back button as the first thing in our `md-toolbar` markup in `index.html`:
 
 ```html
         <!-- back button -->
@@ -348,13 +354,11 @@ The button is programmed to only appear when not in 'showlist' mode, but we need
     }
 ```
 
-Your web app should now allow you to navigate between your two screens. 
+Your web app should now allow you to navigate between your two screens.   Test it by clicking the `+` button, observing the title change and then clicking the `<-` button by the title to go back to the main page.
 
-Let's add a new object to our Vue.js app to represent new shopping list:
+Let's add a new object to our Vue.js app to represent a new shopping list, the `data` element of the Vue object should look like this:
 
 ```js
-  .
-  .
   data: {
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
@@ -362,12 +366,10 @@ Let's add a new object to our Vue.js app to represent new shopping list:
     mode: 'showlist',
     singleList: null
   }
-  .
-  .
 
 ```
 
-and a global constant that represents the structure of a shopping list object:
+We will also add a global constant that represents the structure of a shopping list object (put this near the top of `shoppinglist.js` after the `use` call):
 
 ```js
 const sampleShoppingList = {
@@ -388,7 +390,7 @@ const sampleShoppingList = {
 };
 ```
 
-which we can use to populate `singleList` when the `onClickAddShoppingList` function is called:
+We can use this shopping list structure to populate `singleList` when the `onClickAddShoppingList` function is called; so modify the Vue method in `shoppinglist.js` like this:
 
 ```js
 
@@ -397,13 +399,13 @@ which we can use to populate `singleList` when the `onClickAddShoppingList` func
       // open shopping list form
       this.pagetitle = 'New Shopping List';
       this.mode='addlist';
-      this.singleList = Vue.util.extend({}, sampleShoppingList);
+      this.singleList = JSON.parse(JSON.stringify(sampleShoppingList));
       this.singleList._id = 'list:' + cuid();
       this.singleList.createdAt = new Date().toISOString();
     }
 ```
 
-Now we need to display a form when in 'addlist' mode. Add the following markup to your index.html:
+Now we need to display a form when in 'addlist' mode. Add the following markup to your `index.html` before the list of lists:
 
 ```html
      <!-- add new shopping list form-->
@@ -434,7 +436,7 @@ Next we need to add a way to save the list!
 
 ## Storing the new shopping list
 
-Saving the shopping list is very simple. We just need to add the `singleList` object to the start of our `shoppingLists` array in our Vue.js app. First we need a button that indicates the user wants to save the list (rather than press "back" and cancel the operatio). For this we need a button in our `md-toolbar` tag that only displays in `addlist` mode:
+Saving the shopping list is very simple. We just need to add the `singleList` object to the start of our `shoppingLists` array in our Vue.js app. First we need a button that indicates the user wants to save the list (rather than press "back" and cancel the operation). For this we need a button in our `md-toolbar` tag that only displays in 'addlist' mode:
 
 ```html
         <!-- save new shopping list button -->
@@ -443,7 +445,7 @@ Saving the shopping list is very simple. We just need to add the `singleList` ob
         </md-button>
 ```
 
-This button remains disabled until the length of the `singleList.title` is greater than zero, so we can't save a list without a title. We also need to add a `onClickSaveShoppingList` to our Vue.js app methods to handle the form submission:
+This button remains disabled until the length of the `singleList.title` is greater than zero, so we can't save a list without a title. We also need to add an `onClickSaveShoppingList()` to our Vue.js app methods to handle the form submission:
 
 ```js
     onClickSaveShoppingList: function() {
@@ -455,7 +457,7 @@ This button remains disabled until the length of the `singleList.title` is great
 
 Your app should now save and display any number of shopping lists!
 
-Let's go one stage further and add a button to show and edit the items on a list. First we need a new Vue.js data item to store the id of the list being viewed (currentListId) and a variable to store the new item title (newItemTitle):
+Let's go one stage further and add a button to show and edit the items on a list. First we need a new Vue.js data item to store the id of the list being viewed (`currentListId`) and a variable to store the new item title (`newItemTitle`):
 
 ```js
   data: {
@@ -469,7 +471,7 @@ Let's go one stage further and add a button to show and edit the items on a list
   }
 ```
 
-Inside the `md-card` markup, we can add a new final section that displays a button against each shopping list card:
+Inside the `md-card` markup that we show for each of our lists, we can add a new final section that displays a button against each shopping list card:
 
 ```html
           <md-card-actions>
@@ -479,7 +481,7 @@ Inside the `md-card` markup, we can add a new final section that displays a butt
           </md-card-actions>
 ```
 
-When the button is clicked, it calls `onClickList` button, passing it the id of the list and its name. Let's add a Vue.js method to handle that event:
+When the button is clicked, it calls `onClickList()`, passing it the id of the list and its name. Let's add a Vue.js method to handle that event:
 
 ```js
     // the user wants to see the contents of a shopping list
@@ -518,9 +520,9 @@ This consists of:
 - an 'add' button
 - a list of shopping list items
 
-Notice how the `md-list-item` doesn't display ALL the list items, only the ones that belong to the `currentListId`. Also see how the `onAddListItem` function can be called by pressing the enter key on the input control, or by clicking add button. 
+Notice how the `md-list-item` doesn't display ALL the list items, only the ones that belong to the `currentListId`. Also see how the `onAddListItem()` function can be called by pressing the enter key on the input control, or by clicking add button. 
 
-We need a new object template for a list item:
+We need a new object template for an individual list item:
 
 ```js
 const sampleListItem = {
@@ -534,7 +536,7 @@ const sampleListItem = {
 };
 ```
 
-and an `onAddListItem` method on our Vue.js app:
+And to go with that, an `onAddListItem()` method on our Vue.js app:
 
 ```js 
     onAddListItem: function() {
@@ -584,7 +586,7 @@ and we're going to add a CSS class called "cardchecked" to every item that has b
             <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
 ```
 
-Hint: look for the `<md-list-item v-for="item in shoppingListItems"...>` tag.
+> Hint for where to add the above code : look for the `<md-list-item v-for="item in shoppingListItems"...>` tag.
 
 Finally, adding some extra CSS:
 
@@ -595,7 +597,7 @@ Finally, adding some extra CSS:
 }
 ```
 
-That's it! You should now be able to check items from your shopping lists. Check items should appear grey and crossed out.
+That's it! You should now be able to check items from your shopping lists. Checked items should appear grey and crossed out.
 
 Your code should now look like [Tutorial Step 6 - checking items](tutorial/step6):
 
@@ -615,7 +617,7 @@ e.g. Food 6/14
 
 This requires us to instruct Vue.js to compute these aggregated values every time the underlying `shoppingListItem` array changes. Luckily, Vue.js has the concept of [computed properties](https://vuejs.org/v2/guide/computed.html) - we simply have to provide the aggregation function and the values can be automatically reflected in the markup.
 
-First we add a new objected called `computed` in our Vue.js app:
+First we add a new object called `computed` in our Vue.js app:
 
 ```js
 var vm = new Vue({
@@ -651,7 +653,7 @@ The `computed` object can contain any number of functions - one per computed val
   }
 ```
 
-This function iterates over the app's `shoppingListItems` array building up an object that contains `total` and `checked` for each list e.g.
+This function iterates over the app's `shoppingListItems` array building up an object that contains `total` and `checked` for each list.  It creates data that looks like the example below:
 
 ```js
 {
@@ -679,7 +681,7 @@ Now we need to add a database to store the data between sessions. This is where 
 
 ## Adding a PouchDB database
 
-PouchDB is an in-browser database. It allows your application state to be retained between site visits without sending any data to a server-side process. PouchDB can sync with a remote Apache CouchDB or IBM Cloudant service, but for now we are going to concentrate on making the app store its shopping lists and shopping list items in a PouchDB database.
+PouchDB is an in-browser database. It allows your application state to be retained between site visits without sending any data to a server-side process. PouchDB can also sync with a remote Apache CouchDB or IBM Cloudant service, but for now we are going to concentrate on making the app store its shopping lists and shopping list items in a local PouchDB database.
 
 PouchDB stores JSON documents, which is ideal for storing our shopping list and shopping list item objects. Our objects a distinguished by their `type` attribute ('list', or 'item') so we can store our data in the same database. Storing the same objects in the same table would be unusual for a relational database, but with document stores this is a common design pattern.
 
@@ -697,7 +699,7 @@ At the top of our `shoppinglist.js` we need to initialise a PouchDB database:
 var db = new PouchDB('shopping');
 ```
 
-The `db` object is then ready to use immediately. We need to revist our `onClickSaveShoppingList` functions to add code to make it save the data to the datbase:
+The `db` object is then ready to use immediately. We need to revist our `onClickSaveShoppingList()` function to add code to make it save the data to the database:
 
 ```js
     onClickSaveShoppingList: function() {
@@ -721,7 +723,7 @@ The `db` object is then ready to use immediately. We need to revist our `onClick
 
 The `db.put` function writes the new object to the database. It returns to us an object containing a revision token `_rev`. We store this in our object, in case we need to update the same document in the future. 
 
-We also need to revisit our `onAddListItem` function to add the database logic for shopping list items too:
+We also need to revisit our `onAddListItem()` function to add the database logic for shopping list items too:
 
 ```js
     onAddListItem: function() {
@@ -740,7 +742,7 @@ We also need to revisit our `onAddListItem` function to add the database logic f
     }
 ```
 
-This should be enough to store shopping lists and their items in the database. Now we need to make sure the data is loaded when the website is first loaded. Vue.js calls a `created` function when it first starts up - we can put our startup code in there:
+This should be enough to store shopping lists and their items in the database. Now we need to make sure the data is loaded when the website is first loaded. Vue.js calls a `created` function when it first starts up, which we define in the Vue object at the same level as `methods` and `computed` - we can put our startup code in there:
 
 ```js
   // called once at app startup
@@ -786,7 +788,7 @@ We're nearly there! Just a few more loose ends to tie up before we're done.
 
 You may have noticed that when you tick or untick a shopping list item, the data is not saved to the database. Vue.js makes sure that the front end and the JavaScript app are in sync, but at the moment we are manually writing changes from the `shoppingLists` and `shoppingListItems` arrays to the database.
 
-To close this loophole we need to add two more utility methods to our app to locate and save items:
+To close this loophole we need to add two more utility methods to our Vue.js app to enable us to locate and save items.  When we change records, we'll call `findUpdateDoc()` which itself uses `findDoc()`:
 
 ```js
     // given a list of docs and an id, find the doc
@@ -815,7 +817,7 @@ To close this loophole we need to add two more utility methods to our app to loc
       // if it exits
       if (doc) {
         
-        // modift the updated date
+        // modify the updated date
         doc.updatedAt = new Date().toISOString();
 
         // write it on the next tick (to give Vue.js chance to sync state)
@@ -832,7 +834,7 @@ To close this loophole we need to add two more utility methods to our app to loc
     },
 ```
 
-and add a method that will be called when a shopping list item is checked:
+The methods we just added will be called by an `onCheckListItem()` method that we will also add now:
 
 ```js
     // when an shopping list item is checked, we just need
@@ -842,7 +844,7 @@ and add a method that will be called when a shopping list item is checked:
     }
 ```
 
-Then we modify our checkbox markup to get it to call `onCheckListItem` when the value changes:
+Then we modify our checkbox markup to get it to call `onCheckListItem()` when the value changes:
 
 ```html
             <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
@@ -854,9 +856,9 @@ Your code should now look like [Tutorial Step 9 - Checkbox events](tutorial/step
 
 The final step in our tutorial is to make our application into a Progressive Web App (PWA). A PWA is web application that can be "installed" on a mobile device with an icon on the home screen, just like a native mobile app. To achieve this we need the following components:
 
-- a manifest.json in the same directory as your index.html file (copy [this one](manifest.json)). The manifest file contains your PWA's meta data including app name, icon urls and colour information.
+- a `manifest.json` in the same directory as your `index.html` file (copy [this one](manifest.json)). The manifest file contains your PWA's meta data including app name, icon urls and colour information.
 - a Service Worker, which is a JavaScript process dedicated to your app that controls all the web traffic your app initiates. This allows the Service Worker to cache assets for offline access. Copy [this one](worker.js)
-- some icons. Take [icon128x128.png](icon128x128.png) & [icon512x512.png](icon512x512.png)
+- some icons. Take [icon128x128.png](icon128x128.png) and [icon512x512.png](icon512x512.png)
 
 You'll also need some additional lines in the `<head>` section of your index.html:
 
@@ -892,11 +894,13 @@ where `url` is the URL of a remote CouchDB, Cloudant or PouchDB database e.g.
   var url = 'https://user:pass@host.cloudant.com/shopping';
 ```
 
-The [complete version](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/) of this implements syncing via a "settings" panel, where the remote database URL is entered. 
+With this in place, you can add content and then clear your browser cache or even use a different browser and still see the data.
+
+The [complete version](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/) of this implements syncing via a "settings" panel, where the remote database URL is entered.
  
 ## Summary
 
-In this tutorial we have created a shopping list app from nothing but a handful of empty text files. It is a website that stores its data in a in-browser database and can be installed on mobile device and used offline. 
+In this tutorial we have created a shopping list app from nothing but a handful of empty text files. It is a website that stores its data in a in-browser database and can be installed on mobile devices and used offline. 
 
 The final version of the code can be found [here](https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/). It adds a handful of extra features not included in the tutorial:
 
@@ -905,3 +909,6 @@ The final version of the code can be found [here](https://ibm-watson-data-lab.gi
 - shopping list place names can be looked-up in a database of points-of-interest to get the address and geo-location
 - shopping lists and shopping list items are sorted on load in "newest first" order
 - settings page to allow syncing with a remote database
+- auto updates when data is changed on another device
+
+
