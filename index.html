@@ -60,17 +60,20 @@
       <md-card v-if="mode == 'addlist'">
         <md-card-header>Add Shopping List</md-card-header>
         <md-card-content>
+          <!-- shopping list name -->
           <md-input-container>
             <label>List name</label>
             <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
           </md-input-container>   
           
+          <!-- shopping place name -->
           <md-input-container>
             <label>Place name</label>
             <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>
             <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>             
           </md-input-container>   
 
+          <!-- shopping place pull-down list -->
           <md-input-container v-if="places.length > 1">
             <label for="movie">Choose address</label>
             <md-select v-bind="selectedPlace" v-on:change="onChangePlace" v-bind:disabled="places.length == 0">
@@ -78,41 +81,49 @@
             </md-select>
           </md-input-container>
 
+          <!-- shopping place road -->
           <md-input-container v-if="singleList.place.address.road">
             <label>Road</label>
             <md-input readonly v-model="singleList.place.address.road"></md-input>
           </md-input-container >
 
+          <!-- shopping place town -->
           <md-input-container v-if="singleList.place.address.town">
             <label>Town</label>
             <md-input readonly v-model="singleList.place.address.town"></md-input>
           </md-input-container >
 
+          <!-- shopping place city -->
           <md-input-container v-if="singleList.place.address.city">
             <label>City</label>
             <md-input readonly v-model="singleList.place.address.city"></md-input>
           </md-input-container >
 
+          <!-- shopping place state -->
           <md-input-container v-if="singleList.place.address.state">
             <label>State</label>
             <md-input readonly v-model="singleList.place.address.state"></md-input>
           </md-input-container >
 
+          <!-- shopping place address -->
           <md-input-container v-if="singleList.place.address.postcode">
             <label>Postcode</label>
             <md-input readonly v-model="singleList.place.address.postcode"></md-input>
           </md-input-container >
 
+          <!-- shopping place latitude -->
           <md-input-container v-if="singleList.place.lat != null">
-              <label>Latitude</label>
-              <md-input readonly v-model="singleList.place.lat"></md-input>
-            </md-input-container> 
+            <label>Latitude</label>
+            <md-input readonly v-model="singleList.place.lat"></md-input>
+          </md-input-container> 
             
-            <md-input-container v-if="singleList.place.lon != null">
-              <label>Longitude</label>
-              <md-input readonly v-model="singleList.place.lon"></md-input>
-            </md-input-container>  
+          <!-- shopping place longitude -->
+          <md-input-container v-if="singleList.place.lon != null">
+            <label>Longitude</label>
+            <md-input readonly v-model="singleList.place.lon"></md-input>
+          </md-input-container>  
 
+          <!-- shopping place licence -->
           <md-input-container v-if="singleList.place.license">
             <label>Licence</label>
             <md-input readonly v-model="singleList.place.license"></md-input>
@@ -123,27 +134,38 @@
 
       <!-- shopping list item editor -->
       <md-list class="itemedit" v-if="mode == 'itemedit'">
+
+        <!-- shopping list item add form -->
         <md-list-item>
+          <!-- shopping item title -->
           <md-input-container>
             <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @keyup.enter.native="onAddListItem"></md-input>
           </md-input-container>
+
+          <!-- shopping item add button -->
           <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
             <md-icon class="md-primary">add_shopping_cart</md-icon>
           </md-button>
         </md-list-item>
+
+        <!-- shopping list items -->
         <md-list-item v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
+
+          <!-- checkbox against each item -->
           <div>
             <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
           </div>
+
+          <!-- shopping list item title -->
           <div class="md-list-text-container">
             <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
           </div>
-          <!--<md-button class="md-icon-button md-list-action">
-            <md-icon class="md-primary">more_horiz</md-icon>
-          </md-button>-->
+
+          <!-- shopping list item delete button -->
           <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
-              <md-icon>cancel</md-icon>
-            </md-button>
+            <md-icon>cancel</md-icon>
+          </md-button>
+
           <md-divider></md-divider>
         </md-list-item>
       </md-list> <!-- shopping list item editor -->
@@ -152,28 +174,40 @@
       <md-list v-if="mode == 'showlist'">
         <md-card v-for="list in sortedShoppingLists" :key="list._id" :data-id="list._id">     
           <md-card-header>
+            <!-- shopping list title -->
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
+
+            <!-- shopping place title -->
             <div class="md-subhead">{{ list.place.title }}</div>
+
+            <!-- 'speed dial' buttons -->
             <md-speed-dial md-open="hover" md-direction="left" class="md-fab-top-right">
+
+              <!-- more ... button -->
               <md-button class="md-fab" md-fab-trigger>
                 <md-icon md-icon-morph>more_vert</md-icon>
                 <md-icon>more_horiz</md-icon>
               </md-button>
             
+              <!-- edit button -->
               <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit(list._id, list.title)">
                 <md-icon>edit</md-icon>
               </md-button>
             
+              <!-- delete button -->
               <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete(list._id)">
                 <md-icon>delete</md-icon>
               </md-button>
             </md-speed-dial>
           </md-card-header>
+
+          <!-- counts of numbers of items in the list and numbers checked e.g 4/10 -->
           <md-card-content v-if="counts[list._id]">
             {{ counts[list._id].checked }} / {{ counts[list._id].total }} 
-            <!-- <md-checkbox disabled v-model="list.checked" class="md-primary"></md-checkbox> -->
           </md-card-content>
+
           <md-card-actions>
+            <!-- button to edit the list items -->
             <md-button v-on:click="onClickList(list._id, list.title)">
                 <md-icon>chevron_right</md-icon>
             </md-button>
@@ -187,17 +221,23 @@
           <md-card-content>
             You can sync your shopping lists to a remote Apache CouchDB, IBM Cloudant or PouchDB server. Supply the URL, including
             credentials and database name and hit "Start Sync".
+
+            <!-- Cloudant URL -->
             <md-input-container>
               <label>Sync URL</label>
               <md-input placeholder="e.g http://localhost:5984/list" type="url" v-model="syncURL"></md-input>
             </md-input-container>  
+
             <h4>Sync Status</h4>
+
+            <!-- visualisation of sync status -->
             <md-chip v-if="syncStatus == 'notsyncing'">Not Syncing</md-chip>
             <md-chip v-if="syncStatus == 'syncing'" class="md-primary">Syncing</md-chip>
             <md-chip v-if="syncStatus == 'syncerror'" class="md-warn">Sync Error</md-chip>
           </md-card-content>
 
           <md-card-actions>
+            <!-- submit button that saves the Cloudant URL -->
             <md-button v-on:click="onClickStartSync">
                 Start Sync
             </md-button>
@@ -228,7 +268,7 @@
     }
   </script>
 
-  <!--  Scripts-->
+  <!--  JavaScript Scripts-->
   
   <!-- cuid - unique id generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
