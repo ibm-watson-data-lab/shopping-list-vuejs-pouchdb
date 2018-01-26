@@ -1,3 +1,8 @@
+/**
+ * Configuration for the Karma Test Runner
+ *
+ * @param  {Object} config
+ */
 module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai'],
