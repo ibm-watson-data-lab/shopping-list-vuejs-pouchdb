@@ -177,21 +177,35 @@ Add `/shopping-list` to the URL to connect to the database that you created.
 <!--Edit as appropriate, update screenshot-->
 # Using the app
 
-The app allows you to create a shopping list by clicking on the plus sign. Click on the list to see its items. Then, you can add items to the list by clicking the plus sign. There is a checkbox to allow you to mark the items complete as you buy load up your cart.
+The app allows you to create a shopping list by clicking on the plus sign. Click on the twistie to display list items, add new items, remove items or scratch them off.
+
+<!-- add/replace screen capture(s) -->
+![app shopping lists](doc/source/images/app_shopping_lists.png)
 
 When you have not configured your Replication Target or when you are offline, the lists will not sync. One good way to test this is to run two browsers. You can use Chrome and Firefox and have different lists in each.
 
 When you go online and have the database and CORS enabled and the Replication Target is set, the shopping lists will sync. You will then be able to use both lists from either browser.
 
-<!-- add/replace screen capture(s) -->
-![](doc/source/images/shopping_lists.png)
-
 ## Running the tests
 
 <!-- replace with test information, if there are tests defined -->
-This project does not, at present, have any automated tests. If you'd like to contribute some then please raise and issue and submit a pull-request - we'd be very happy to add them! Any pull-request you contribute will run through our continuous integration process which will check your code style.
+This repository uses the [karma test runner](http://karma-runner.github.io/2.0/index.html). Our continuous integration will run the tests when you push to GitHub. To test your code on your machine, simply run `npm test`.
+
+This project does not, at present, have any automated tests. Tests can be added to the `test` directory. If you'd like to contribute some then please raise an issue and submit a pull-request - we'd be very happy to add them!
 
 ## Deploying to GitHub Pages
+
+This shopping list app can be deployed to and accessed from GitHub Pages. This app is available to try at https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/ without downloading or installing anything because this repository is itself deployed to GitHub Pages.
+
+To make your own custom deployment, you only need the following files:
+
+- index.html
+- shoppinglist.js
+- shoppinglist.css
+- worker.js
+- manifest.json
+
+Create a new GitHub repository containing only the above three files and follow the instructions [here](https://pages.github.com/) on how to publish the files to a GitHub Pages URL.
 
 <!-- remove this section (and the dependent sub-sections) if the repo is not enabled for metrics cllection --> 
 # Privacy Notice
