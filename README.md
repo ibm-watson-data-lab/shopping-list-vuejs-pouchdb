@@ -195,6 +195,18 @@ This project does not, at present, have any automated tests. Tests can be added 
 
 ## Deploying to GitHub Pages
 
+This shopping list app can be deployed to and accessed from GitHub Pages. This app is available to try at https://ibm-watson-data-lab.github.io/shopping-list-vuejs-pouchdb/ without downloading or installing anything because this repository is itself deployed to GitHub Pages.
+
+To make your own custom deployment, you only need the following files:
+
+- index.html
+- shoppinglist.js
+- shoppinglist.css
+- worker.js
+- manifest.json
+
+Create a new GitHub repository containing only the above three files and follow the instructions [here](https://pages.github.com/) on how to publish the files to a GitHub Pages URL.
+
 <!-- remove this section (and the dependent sub-sections) if the repo is not enabled for metrics cllection --> 
 # Privacy Notice
 <!-- No change required. Only link to the "master" privacy notice; this avoids duplication of content and -->
