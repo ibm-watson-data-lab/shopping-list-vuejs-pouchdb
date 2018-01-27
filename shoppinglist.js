@@ -207,14 +207,6 @@ var app = new Vue({
       this.mode = 'about';
     },    
     /**
-     * Called when the close button is pressed in the about card. Sets the mode
-     * to 'showlist' so the Vue displays the shopping list.
-     */
-    onClickAboutClose: function() {
-       this.mode='showlist';
-       this.pagetitle='Shopping Lists';
-    },    
-    /**
      * Saves 'doc' to PouchDB. It first checks whether that doc
      * exists in the database. If it does, it overwrites it - if
      * it doesn't, it just writes it. 
