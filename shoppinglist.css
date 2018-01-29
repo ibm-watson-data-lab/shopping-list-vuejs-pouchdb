@@ -19,6 +19,10 @@ body {
   padding-bottom:0px !important;
 }
 
+.md-theme-default.md-card a {
+  color: #448aff !important;
+}
+
 .cardchecked {
   text-decoration: line-through;
   color: #ccc
