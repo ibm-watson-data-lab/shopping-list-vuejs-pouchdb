@@ -200,6 +200,13 @@ var app = new Vue({
       this.mode = 'settings';
     },
     /**
+     * Called when the about button is pressed. Sets the mode
+     * to 'about' so the Vue displays the about panel.
+     */
+    onClickAbout: function() {
+      this.mode = 'about';
+    },    
+    /**
      * Saves 'doc' to PouchDB. It first checks whether that doc
      * exists in the database. If it does, it overwrites it - if
      * it doesn't, it just writes it. 

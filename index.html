@@ -50,6 +50,11 @@
         <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickSettings">
           <md-icon>settings</md-icon>
         </md-button>
+        <!-- about -->
+        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickAbout">
+          <md-icon>info_outline</md-icon>
+        </md-button>
+
       </md-toolbar>
     </md-whiteframe> <!-- top bar -->
     
@@ -243,6 +248,18 @@
             </md-button>
           </md-card-actions> 
         </md-card> <!-- settings -->
+
+      <!-- about -->
+      <md-card v-if="mode == 'about'">
+          <md-card-header>About</md-card-header>
+          <md-card-content>
+            <a href="https://github.com/ibm-watson-data-lab/shopping-list">Shopping List is a series of Offline First demo apps, each built using a different stack.</a> These demo apps cover Progressive Web Apps, hybrid mobile apps, native mobile apps, and desktop apps. This particular demo app is a <b>Progressive Web App</b> built using <b>Vue.js and PouchDB</b>. <a href="https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb">Get the source code.</a>
+          </md-card-content>
+
+          <md-card-actions>
+            <!-- No action -->
+          </md-card-actions> 
+      </md-card> <!-- about -->
 
       <!-- floating 'add shopping list' button -->
       <div class="floatingbutton" v-if="mode == 'showlist'">
